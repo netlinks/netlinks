@@ -1,0 +1,12 @@
+<html>
+	<body>
+		<h2>{{message}}</h2>
+		<form action="/save" method="post">
+			<div>URL<input type="text" name="url" size="100"></div>
+			<div><input type="submit" value="Save"></div>
+		</form>
+		<br>
+		<a href="/view">View</a><br>
+		<a href={{logout_url}}>Logout</a>
+	</body>
+</html>
