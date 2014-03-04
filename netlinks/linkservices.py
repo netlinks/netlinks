@@ -46,12 +46,27 @@ def addLink(params):
 def updateLink(params):
     logging.info('updateLink(): start')
     
-    link = params['link_key'].get()
-    link.url = params['url']
-    link.date_m = datetime.datetime.now()
-    link.put()
+        
+    if 'link_key' in params:
+        link = params['link_key'].get()
+    else:
+        return False
     
-    status = 'Success: from updateLink'    
+    change = False
+    
+    if 'new_name' in params:
+        link.name = params['new_name']
+        change = True
+    
+    #TODO need to capture changes in other parameters of the link
+    
+    if change is True:
+        link.date_m = datetime.datetime.now()
+        link.put()
+        status = 'Success: from updateLink'
+    else:
+        status = "No changes"
+    
     return status
     
 

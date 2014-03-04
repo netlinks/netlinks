@@ -68,16 +68,32 @@ def addFolder(params):
 
 def updateFolder(params):
     logging.info('updateFolder(): start')
-    folder = params['folder_key'].get()
-    folder.name = params['new_name']
-    folder.date_m = datetime.datetime.now()
     
-    #calculate updated path and save - parent folder path + my name
-    folder.path = folder.parent_folder.get().path + folder.name + '/'
+    if 'folder_key' in params:
+        folder = params['folder_key'].get()
+    else:
+        return False
     
-    folder.put()
+    change = False
     
-    status = 'Success: from updateFolder'
+    if 'new_name' in params:
+        folder.name = params['new_name']
+        
+        #calculate updated path and save - parent folder path + my name
+        folder.path = folder.parent_folder.get().path + folder.name + '/'
+        
+        #TODO - Need to update path of all subfolder. it looks need a seperate folder to calculate the path of folders
+
+        change = True
+    
+    #TODO need to capture changes in other parameters of the link
+    
+    if change is True:
+        folder.date_m = datetime.datetime.now()
+        folder.put()
+        status = 'Success: from updateFolder'
+    else:
+        status = "No changes"
     
     return status
     

@@ -111,7 +111,7 @@ $.fn.drawIcons = function (data,status,folder_contents) {
 			type = "folder";
 			for (j in folder_contents[i])
         	{
-          		txt = txt + "<div class='div-thumbnail-container div-thumbnail-container-hook' id = '"  + folder_contents[i][j].key + "' data-type='" + type + "' data-seq='" + j +"'><div class='div-thumbnail-icon'><img class='img-thumbnail-folder-icon' src='/images/folder-icon.png' width='107px' height='110px'></img></div><div class='div-thumbnail-desc'>" + folder_contents[i][j].name + "</div></div>"; 
+          		txt = txt + "<div class='div-thumbnail-container div-thumbnail-container-hook' id = '"  + folder_contents[i][j].key + "' data-type='" + type + "' data-seq='" + j +"'><div class='div-thumbnail-icon'><img class='img-thumbnail-folder-icon' src='/images/folder-icon.png' width='107px' height='110px'></img></div><div class='div-thumbnail-desc div-thumbnail-desc-hook'>" + folder_contents[i][j].name + "</div></div>"; 
         	}
 	   	}
 		//if element is link, iterate though the list of links and construct the inner html
@@ -120,7 +120,7 @@ $.fn.drawIcons = function (data,status,folder_contents) {
 	   		type = "link";
 	   		for (j in folder_contents[i])
         	{
-          		txt = txt + "<div class='div-thumbnail-container  div-thumbnail-container-hook' id = '"  + folder_contents[i][j].key + "' data-type='" + type + "' data-seq='" + j + "' data-url='"+folder_contents[i][j].url+"'><div class='div-thumbnail-icon'><img class='img-thumbnail-file-icon' src='/images/unk-file-icon.png' width='107px' height='110px'></img></div><div class='div-thumbnail-desc'>" + folder_contents[i][j].url +"</div></div>";
+          		txt = txt + "<div class='div-thumbnail-container  div-thumbnail-container-hook' id = '"  + folder_contents[i][j].key + "' data-type='" + type + "' data-seq='" + j + "' data-url='"+folder_contents[i][j].url+"'><div class='div-thumbnail-icon'><img class='img-thumbnail-file-icon' src='/images/unk-file-icon.png' width='107px' height='110px'></img></div><div class='div-thumbnail-desc div-thumbnail-desc-hook'>" + folder_contents[i][j].name +"</div></div>";
         	}
 	   	}
 	}
@@ -424,15 +424,14 @@ $.fn.wspaceRightClickHandler = function (ui){
 		};
 		
 		$.post("folder",{
-			action : action,
-			params : JSON.stringify(params)
-		},
-		function(data,status){
+				action : action,
+				params : JSON.stringify(params)
+			},
+			function(data,status){
 			
 			//if success remove the deleted icon from the UI
 			$.fn.refreshCurrentFolderView();
-		}
-	);
+		});
 	}
 	
 	
@@ -472,15 +471,14 @@ $.fn.wspaceRightClickHandler = function (ui){
 
 
 
-
-
-
 /************************************ FUNCTION RIGHT CLICK MENU HANDLER ***********************************************************/
 
 $.fn.iconRightClickHandler = function (icon, ui) {
 	
 	//get action from selected menu item
 	var action = $(ui.item).attr("action");
+	
+	console.log(action);
 	
 	//find out the icon type (forlder or link) and its key
 	var icon_type = $(icon).attr("data-type");
@@ -489,73 +487,107 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 	
 	if ( icon_type == "folder" )
 	{
-		//////////////////////////////
-		// if action is open
-		if ( action == "open" )
-		{
-			//open folder
-			$.fn.openFolder(icon_key);
-			
-		}
-		
-		
-		
-		//////////////////////////////
-		// if action is copy
-		else if ( action == "copy" )
-		{
-			
-			console.log("copying");
-			
-			//save icon details to clipboard			
-			g_clipboard["action"] = "COPY";
-			g_clipboard["object_type"] = "FOLDER";
-			g_clipboard["object_key"] = icon_key;
-
+				//////////////////////////////
+				// if action is open
+				if ( action == "open" )
+				{
+					//open folder
+					$.fn.openFolder(icon_key);
+					
+				}
 				
-		}
-		
-		
-		
-		//////////////////////////////
-		// if action is cut
-		else if ( action == "cut" )
-		{
-			console.log("cutting");
-			
-			//save icon details to clipboard
-			g_clipboard["action"] = "CUT";
-			g_clipboard["object_type"] = "FOLDER";
-			g_clipboard["object_key"] = icon_key;
-
 				
-		}
+				
+				//////////////////////////////
+				// if action is copy
+				else if ( action == "copy" )
+				{
+					
+					console.log("copying");
+					
+					//save icon details to clipboard			
+					g_clipboard["action"] = "COPY";
+					g_clipboard["object_type"] = "FOLDER";
+					g_clipboard["object_key"] = icon_key;
 		
+						
+				}
+				
+				
+				
+				//////////////////////////////
+				// if action is cut
+				else if ( action == "cut" )
+				{
+					console.log("cutting");
+					
+					//save icon details to clipboard
+					g_clipboard["action"] = "CUT";
+					g_clipboard["object_type"] = "FOLDER";
+					g_clipboard["object_key"] = icon_key;
 		
-		
-		
-		
-		///////////////////////////////////////
-		// if action is delete
-		else if ( action == "delete" )
-		{
-			$.fn.deleteFolder(icon_key);
-			
-			//remove the deleted icon from the UI
-			$("#" + icon_key).remove();
-			
-		}
-		
-		
-		
-		
-		//TODO need to add other action - copy, rename etc....
-		else 
-		{
-			console.log("coming soon");
-		}
-		
-		
+						
+				}
+				
+				
+				
+				
+				//////////////////////////////
+				// if action is rename
+				else if ( action == "rename" )
+				{
+					
+					var current_name = $(icon).find(".div-thumbnail-desc-hook").html();
+					
+					txt = "<form id='form-icon-rename' action='javascript:void(0);'><input id='tbox-icon-rename' class='tbox-icon-rename' type='text' value='"+current_name+"'></form>";
+					
+					//change the name value with the form to text field create above
+					$(icon).find(".div-thumbnail-desc-hook").html(txt);
+					//Get focus to the text box and select all text inside it
+					$(icon).find("#tbox-icon-rename").focus().select();
+					
+					//attach evnet listener to the newly created form above
+					$( "#form-icon-rename" ).submit(function( event ) {
+					
+						//get new name of the folder
+						var new_name = $(icon).find("#tbox-icon-rename").val();
+						
+						//call fucntion to save the new name to the backend server
+						$.fn.renameFolder(icon_key, new_name);
+						
+						//prevent browser default form submit action
+						event.preventDefault();
+					});
+					
+					 
+						
+				}
+				
+				
+				
+				
+				
+				///////////////////////////////////////
+				// if action is delete
+				else if ( action == "delete" )
+				{
+					$.fn.deleteFolder(icon_key);
+					
+					//remove the deleted icon from the UI
+					$("#" + icon_key).remove();
+					
+				}
+				
+				
+				
+				
+				//TODO need to add other action - copy, rename etc....
+				else 
+				{
+					console.log("coming soon");
+				}
+				
+				
 	}
 	
 	
@@ -567,70 +599,102 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 	
 	else if ( icon_type == "link" )
 	{
-		//////////////////////////////
-		// if action is open
-		if ( action == "open" )
-		{
-			//get url of the clicked file
-			var url = $(icon).attr("data-url");
-			
-			//open the file
-			$.fn.openFile(url);
-				
-		}
-		
-		
-		
-		//////////////////////////////
-		// if action is copy
-		else if ( action == "copy" )
-		{
-			
-			console.log("copying file");
-			//save icon details to clipboard			
-			g_clipboard["action"] = "COPY";
-			g_clipboard["object_type"] = "FILE";
-			g_clipboard["object_key"] = icon_key;
-
-				
-		}
-		
-		
-		
-		//////////////////////////////
-		// if action is cut
-		else if ( action == "cut" )
-		{
-			console.log("cutting file");
-			//save icon details to clipboard
-			g_clipboard["action"] = "CUT";
-			g_clipboard["object_type"] = "FILE";
-			g_clipboard["object_key"] = icon_key;
-
-				
-		}
-		
-		
-		
-		
-		//////////////////////////////
-		// if action is delete
-		else if ( action == "delete" )
-		{
-			//delete file
-			$.fn.deleteFile(icon_key);
+				//////////////////////////////
+				// if action is open
+				if ( action == "open" )
+				{
+					//get url of the clicked file
+					var url = $(icon).attr("data-url");
 					
-		}
+					//open the file
+					$.fn.openFile(url);
+						
+				}
+				
+				
+				
+				//////////////////////////////
+				// if action is copy
+				else if ( action == "copy" )
+				{
+					
+					console.log("copying file");
+					//save icon details to clipboard			
+					g_clipboard["action"] = "COPY";
+					g_clipboard["object_type"] = "FILE";
+					g_clipboard["object_key"] = icon_key;
 		
+						
+				}
+				
+				
+				
+				//////////////////////////////
+				// if action is cut
+				else if ( action == "cut" )
+				{
+					console.log("cutting file");
+					//save icon details to clipboard
+					g_clipboard["action"] = "CUT";
+					g_clipboard["object_type"] = "FILE";
+					g_clipboard["object_key"] = icon_key;
 		
-		
-		
-		
-		//TODO need to add other action - copy, rename etc....
-		else 
-		{
-			console.log("coming soon");
-		}
+						
+				}
+				
+				
+				
+				
+				//////////////////////////////
+				// if action is rename
+				else if ( action == "rename" )
+				{
+					
+					var current_name = $(icon).find(".div-thumbnail-desc-hook").html();
+					
+					txt = "<form id='form-icon-rename' action='javascript:void(0);'><input id='tbox-icon-rename' class='tbox-icon-rename' type='text' value='"+current_name+"'></form>";
+					
+					//change the name value with the form text field created above
+					$(icon).find(".div-thumbnail-desc-hook").html(txt);					
+					//Get focus to the text box and select all text inside it
+					$(icon).find("#tbox-icon-rename").focus().select();
+					
+					//attach evnet listener to the newly created form above
+					$( "#form-icon-rename" ).submit(function( event ) {
+					
+						//get new name of the file
+						var new_name = $(icon).find("#tbox-icon-rename").val();
+						
+						//call fucntion to save the new name to the backend server
+						$.fn.renameFile(icon_key, new_name);
+						
+						//prevent browser default form submit action
+						event.preventDefault();
+					});
+					
+				}
+				
+				
+				
+				
+				//////////////////////////////
+				// if action is delete
+				else if ( action == "delete" )
+				{
+					//delete file
+					$.fn.deleteFile(icon_key);
+							
+				}
+				
+				
+				
+				
+				
+				//TODO need to add other action - copy, rename etc....
+				else 
+				{
+					console.log("coming soon");
+				}
 	}
 	
 	
@@ -673,128 +737,6 @@ $.fn.openFolder = function (folder_id) {
 
 
 
-
-/************************************ FUNCTION DELETE FOLDER ************************************************************/
-
-$.fn.deleteFolder = function (icon_key) {
-		
-	var action = "deletefolder";
-	var params = {
-		"folder_key" : icon_key
-	};
-	
-	
-	$.post("folder",{
-			action : action,
-			params : JSON.stringify(params)
-		},
-		function(data,status){
-			
-			//if success remove the deleted icon from the UI
-			$("#" + icon_key).remove();
-		}
-	);
-	
-};
-
-
-/************************************ END - FUNCTION DELETE FOLDER ************************************************************/
-
-
-
-
-
-/**************************** FUNCTION TO MOVE FILE ******************************************************/
-
-
-$.fn.moveFile = function (object_key, target_folder_key) {
-
-	var action = "movelink";
-	var params = {
-		"link_key" : object_key,
-		"target_folder_key" : target_folder_key	
-	};
-	
-	
-	$.post("link",{
-		action : action,
-		params : JSON.stringify(params)
-	},
-	function(data,status){
-		$.fn.refreshCurrentFolderView();
-	}); 
-
-};
-
-
-/**************************** END - FUNCTION TO MOVE FILE ******************************************************/
-
-
-
-
-
-
-
-/**************************** FUNCTION TO COPY FILE ******************************************************/
-
-
-$.fn.copyFile = function (object_key, target_folder_key) {
-
-	var action = "copylink";
-	var params = {
-		"link_key" : object_key,
-		"target_folder_key" : target_folder_key	
-	};
-	
-	
-	$.post("link",{
-		action : action,
-		params : JSON.stringify(params)
-	},
-	function(data,status){
-		$.fn.refreshCurrentFolderView();
-	}); 
-
-};
-
-
-/**************************** END - FUNCTION TO COPY FILE ******************************************************/
-
-
-
-
-
-
-
-
-/**************************** FUNCTION TO MOVE FILE ******************************************************/
-
-
-$.fn.moveFolder = function (object_key, target_folder_key) {
-
-	var action = "movefolder";
-	var params = {
-		"folder_key" : object_key,
-		"target_folder_key" : target_folder_key	
-	};
-	
-	
-	$.post("folder",{
-		action : action,
-		params : JSON.stringify(params)
-	},
-	function(data,status){
-		$.fn.refreshCurrentFolderView();
-	}); 
-
-};
-
-
-/**************************** END - FUNCTION TO MOVE FILE ******************************************************/
-
-
-
-
 /**************************** FUNCTION TO COPY FOLDER ******************************************************/
 
 
@@ -826,6 +768,235 @@ $.fn.copyFolder = function (object_key, target_folder_key) {
 
 
 
+/**************************** FUNCTION TO MOVE FOLDER ******************************************************/
+
+
+$.fn.moveFolder = function (object_key, target_folder_key) {
+
+	var action = "movefolder";
+	var params = {
+		"folder_key" : object_key,
+		"target_folder_key" : target_folder_key	
+	};
+	
+	
+	$.post("folder",{
+		action : action,
+		params : JSON.stringify(params)
+	},
+	function(data,status){
+		$.fn.refreshCurrentFolderView();
+	}); 
+
+};
+
+
+/**************************** END - FUNCTION TO MOVE FOLDER ******************************************************/
+
+
+
+
+
+
+
+/**************************** FUNCTION TO RENAME FOLDER ******************************************************/
+
+$.fn.renameFolder = function (folder_key, name) {
+	
+	var action = "updatefolder";
+	var params = {
+		"folder_key" : folder_key,
+		"new_name" : name
+	};
+	
+	
+	$.post("folder",{
+			action : action,
+			params : JSON.stringify(params)
+		},
+		function(data,status){
+			
+			$.fn.refreshCurrentFolderView();
+		}
+	);
+
+	
+};
+
+/**************************** END - FUNCTION TO RENAME FOLDER ******************************************************/
+
+
+
+
+
+
+
+/************************************ FUNCTION DELETE FOLDER ************************************************************/
+
+$.fn.deleteFolder = function (icon_key) {
+		
+	var action = "deletefolder";
+	var params = {
+		"folder_key" : icon_key
+	};
+	
+	
+	$.post("folder",{
+			action : action,
+			params : JSON.stringify(params)
+		},
+		function(data,status){
+			
+			//if success remove the deleted icon from the UI
+			$("#" + icon_key).remove();
+		}
+	);
+	
+};
+
+
+/************************************ END - FUNCTION DELETE FOLDER ************************************************************/
+
+
+
+
+
+
+
+
+
+/*****************************************FUNCTION OPEN WINDOWN **********************************************************/
+
+$.fn.openFile = function (url) {
+	
+	
+	$.post("app",{
+					appid : "linkviewer",
+					params : url
+			},
+			function(data,status){
+				
+				//TODO when multitasking is to be enabled, new app window have to be created.
+				
+				//response from the server needs to be pushed in the new window's iframe
+				var app_url = data;
+				
+				//Make window content from the server response
+				txt = "<iframe class='iframe-app-content' id='iframe-app-content-1' src='"+ app_url +"'></iframe>";
+				
+				//open widow with the content from the server
+				$.fn.openWindow(txt);
+				
+			}
+	); 	
+};
+
+
+/*********************************** END FUNCTION OPEN WINDOWN ************************************************/
+
+
+
+
+
+/**************************** FUNCTION TO COPY FILE ******************************************************/
+
+
+$.fn.copyFile = function (object_key, target_folder_key) {
+
+	var action = "copylink";
+	var params = {
+		"link_key" : object_key,
+		"target_folder_key" : target_folder_key	
+	};
+	
+	
+	$.post("link",{
+			action : action,
+			params : JSON.stringify(params)
+		},
+		function(data,status){
+			$.fn.refreshCurrentFolderView();
+		}
+	); 
+
+};
+
+
+/**************************** END - FUNCTION TO COPY FILE ******************************************************/
+
+
+
+
+
+
+
+
+
+
+
+/**************************** FUNCTION TO MOVE FILE ******************************************************/
+
+
+$.fn.moveFile = function (object_key, target_folder_key) {
+
+	var action = "movelink";
+	var params = {
+		"link_key" : object_key,
+		"target_folder_key" : target_folder_key	
+	};
+	
+	
+	$.post("link",{
+			action : action,
+			params : JSON.stringify(params)
+		},
+		function(data,status){
+			$.fn.refreshCurrentFolderView();
+		}
+	); 
+
+};
+
+
+/**************************** END - FUNCTION TO MOVE FILE ******************************************************/
+
+
+
+
+
+
+
+/**************************** FUNCTION TO RENAME FILE ******************************************************/
+
+$.fn.renameFile = function (link_key, name) {
+	
+	var action = "updatelink";
+	var params = {
+		"link_key" : link_key,
+		"new_name" : name	
+	};
+	
+	
+	$.post("link",{
+			action : action,
+			params : JSON.stringify(params)
+		},
+		function(data,status){
+			$.fn.refreshCurrentFolderView();
+		}
+	);
+		
+};
+
+/**************************** END - FUNCTION TO RENAME FILE ******************************************************/
+
+
+
+
+
+
+
+
 
 
 
@@ -846,10 +1017,8 @@ $.fn.deleteFile = function (icon_key) {
 			params : JSON.stringify(params)
 		},
 		function(data,status){
-			
 			//if success remove the deleted icon from the UI
 			$("#" + icon_key).remove();
-			
 		}
 	);
 	
@@ -1223,39 +1392,6 @@ function Appwindow()
 }
 
 /************************************ END WINDOW OBJECT DEFINITION ************************************************************/
-
-
-
-
-
-/*****************************************FUNCTION OPEN WINDOWN **********************************************************/
-
-$.fn.openFile = function (url) {
-	
-	
-	$.post("app",{
-					appid : "linkviewer",
-					params : url
-			},
-			function(data,status){
-				
-				//TODO when multitasking is to be enabled, new app window have to be created.
-				
-				//response from the server needs to be pushed in the new window's iframe
-				var app_url = data;
-				
-				//Make window content from the server response
-				txt = "<iframe class='iframe-app-content' id='iframe-app-content-1' src='"+ app_url +"'></iframe>";
-				
-				//open widow with the content from the server
-				$.fn.openWindow(txt);
-				
-			}
-	); 	
-};
-
-
-/*********************************** END FUNCTION OPEN WINDOWN ************************************************/
 
 
 

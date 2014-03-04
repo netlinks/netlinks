@@ -465,7 +465,13 @@ ul.ul-wspace-right-click-menu
     width: 120px;
 }
 
-
+.tbox-icon-rename
+{
+    border: 1px solid #000000;
+    text-align: center;
+    width: 95%;
+    height: 95%;
+}
 
 
 
