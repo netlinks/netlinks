@@ -19,34 +19,44 @@ def addFolder(params):
     logging.info('addFolder(): Start')
     user_id = users.get_current_user().user_id() #Get current user's id    
     
-    folder = Folder(parent=genFolderParentKey(user_id)) #Create a datastore entity with parent as the key generated above
+    folder = Folder(parent=genFolderParentKey()) #Create a datastore entity with parent as the key generated above
         
-    #assign form data to entity properties        
-    folder.name = params['name']
-    folder.icon = params['icon']
-    folder.color = params['color']
+    #assign form data to entity properties
+    if 'name' in params:           
+        folder.name = params['name']
+    else:
+        folder.name = 'Folder'
+    
+    if 'icon' in params:
+        folder.icon = params['icon']
+    else:
+        folder.icon = 'Default'
+    
+    if 'color' in params:
+        folder.color = params['color']
+    else:
+        folder.color = 'Default'
+    
     folder.date_c = datetime.datetime.now()
     folder.date_m = datetime.datetime.now()
     folder.n_items = 0         #this value needs to be calculated and populated.
     
-    folder.view = params['view']
-    folder.parent_folder = params['parent_folder_key']
-    
-    
-    #calculate path from parent folder and save - parent folder path + my name
-    if params['parent_folder_key'] is not None:
-        folder.path = params['parent_folder_key'].get().path + folder.name + '/'
-    
-    #if root folder
+    if 'view' in params:
+        folder.view = params['view']
     else:
-        folder.path = params['path']
-
+        folder.view = 'Default'
     
-    #increment parent folder's items count and save. Do it only  if current folder is not root, 
-    if params['parent_folder_key'] is not None:
+    if 'parent_folder_key' in params:
+        folder.parent_folder = params['parent_folder_key']
+        folder.path = params['parent_folder_key'].get().path + folder.name + '/'    #calculate path from parent folder and save - parent folder path + my name
+        
+        #increment parent folder's items count and save. Do it only  if current folder is not root,
         params['parent_folder_key'].get().n_items += 1 
         params['parent_folder_key'].get().put()
         
+    else:                                                       #if no parent folder mentioned, set parent as mydrive        
+        folder.parent_folder = None                             #TODO need to set parent as 'mydrive' 
+        folder.path = "/"
     
         
     return folder.put()     #save the folder details and return the key
@@ -174,7 +184,7 @@ def copyFolder(params):
     
     return status    
     
-    
+#TODO Copy the subfolders and files
 
 #################################################################################################################
 
@@ -348,8 +358,8 @@ def addSystemFolders():
 def folderServices(page):
     logging.info('folderServices(): Start')
 
-    action = page.request.get('action')
-    params = json.loads(page.request.get('params'))
+    action = page.request.get('action')                 #Capture the action from front end
+    params = json.loads(page.request.get('params'))     #Parse the JSON object from the front end
     
     
     if action == 'addfolder':

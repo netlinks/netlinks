@@ -6,11 +6,14 @@ $( document ).ready( function() {  //this is to make sure the script starts only
 /*************** GLOBAL VARIABLES *************************/
 
 //this global variable is to store current folder being displayed. This will be pushed to g_prev_folder_key_stack. This is to enable back button functionality
+//this variable is used at many places eg - refresh page
 var g_current_folder_key;
 
 //this global stack is to remember the folder hierarchy visited to enable back button.
 var g_prev_folder_key_stack = [];  
 
+//this global variable is to store current highlighted icon. this can be used to capture the highlighted icon at various places. 
+var g_highlighed_icon = "NONE";	
 
 //clipboard object for cut/copy/paste
 
@@ -38,7 +41,7 @@ g_clipboard["object_key"] = "";
 
 /************************************ FUNCTION TO HANDLE DRAG AND DROP OPERATION ************************************************************/
 
-$.fn.iconDropHandler = function (event, ui, target_element) {
+$.fn.iconDragDropHandler = function (event, ui, target_element) {
 	
 	var target_type = $(target_element).attr("data-type");
 	var target_id =  $(target_element).attr("id");
@@ -143,7 +146,7 @@ $.fn.drawIcons = function (data,status,folder_contents) {
 				drop: function(event,ui)  
 				{
 					//call handler for droping one icon over another
-					$.fn.iconDropHandler(event,ui,this);		//pass event, ui object and droppable object [ie, this - object on which drop is happened]
+					$.fn.iconDragDropHandler(event,ui,this);		//pass event, ui object and droppable object [ie, this - object on which drop is happened]
 				}
 	});
 	
@@ -326,78 +329,118 @@ $.fn.wspaceRightClickHandler = function (ui){
 	var object_key = g_clipboard["object_key"];
 	var target_folder = g_current_folder_key;
 	
-	
+	  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	 ///////////////////////////////////////////// P A S T E /////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if (action == "paste")
 	{
-		//if clipboard action was copy, copy the clipboard item to current folder
-		if ( clipboard_action == "COPY" )
-		{	
-			//if the copied item was a file, copy the file to current folder
-			if ( object_type == "FILE" )
-			{
-				//copy file to target folder
-				$.fn.copyFile( object_key, target_folder );
+				//if clipboard action was copy, copy the clipboard item to current folder
+				if ( clipboard_action == "COPY" )
+				{	
+								//if the copied item was a file, copy the file to current folder
+								if ( object_type == "FILE" )
+								{
+									//copy file to target folder
+									$.fn.copyFile( object_key, target_folder );
+								}
+								
+								//if the copied item was a folder, copy the file to current folder
+								else if ( object_type == "FOLDER" )
+								{
+								
+									//copy folder to target folder
+									$.fn.copyFolder( object_key, target_folder );
+								}
+								else
+								{
+									console.log("someting is wrong");
+								}	
+			
+				}
+				
+				//if clipboard action was CUT, move the clipboard item to current folder
+				else if ( clipboard_action == "CUT" )
+				{
+								//if the cut item was a file, move the file to current folder
+								if ( object_type == "FILE" )
+								{
+									
+									//move file to target folder
+									$.fn.moveFile( object_key, target_folder );
+									
+									
+									//refresh the current folder view
+									//TODO for smoother GUI experience, instead of refreshing, we can draw icon on this folder
+									
+									
+									
+								}
+								
+								//if the cut item was a folder, move the file to current folder
+								else if ( object_type == "FOLDER" )
+								{
+									//move folder to target folder
+									$.fn.moveFolder( object_key, target_folder );
+									
+								}
+								
+								else
+								{
+									console.log("someting is wrong");
+								}
+					
+				}
+								
+				else
+				{
+								console.log("something is wrong");
+				}
+				
+				
 			}
 			
-			//if the copied item was a folder, copy the file to current folder
-			else if ( object_type == "FOLDER" )
-			{
-			
-				//copy folder to target folder
-				$.fn.copyFolder( object_key, target_folder );
-			}
-			else
-			{
-				console.log("someting is wrong");
-			}	
 	
-		}
-		
-		//if clipboard action was CUT, move the clipboard item to current folder
-		else if ( clipboard_action == "CUT" )
-		{
-			//if the cut item was a file, move the file to current folder
-			if ( object_type == "FILE" )
-			{
-				
-				//move file to target folder
-				$.fn.moveFile( object_key, target_folder );
-				
-				
-				//refresh the current folder view
-				//TODO for smoother GUI experience, instead of refreshing, we can draw icon on this folder
-				
-				
-				
-			}
-			
-			//if the cut item was a folder, move the file to current folder
-			else if ( object_type == "FOLDER" )
-			{
-				//move folder to target folder
-				$.fn.moveFolder( object_key, target_folder );
-				
-			}
-			
-			else
-			{
-				console.log("someting is wrong");
-			}
-			
-		}
-		
-		
-		else
-		{
-			console.log("something is wrong");
-		}
-		
-		
+	 
+	  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	 ////////////////////////////////////////// A D D F I L E /////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	else if ( action == "addfile" )
+	{
+		console.log("adding file");
 	}
 	
 	
-	 //////////////////////////////////////
-	//if action is refresh
+	
+	  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	 ////////////////////////////////////////// A D D F O L D E R /////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	else if ( action == "addfolder" )
+	{
+		console.log("adding folder");
+		
+		var action = "addfolder";
+		var params = {
+			"parent_folder_key" : g_current_folder_key
+		};
+		
+		$.post("folder",{
+			action : action,
+			params : JSON.stringify(params)
+		},
+		function(data,status){
+			
+			//if success remove the deleted icon from the UI
+			$.fn.refreshCurrentFolderView();
+		}
+	);
+	}
+	
+	
+	
+	
+	  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	 ///////////////////////////////////////////// R E F R E S H //////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	else if ( action == "refresh" )
 	{
 	
@@ -405,6 +448,10 @@ $.fn.wspaceRightClickHandler = function (ui){
 		$.fn.refreshCurrentFolderView();
 		
 	}
+	
+	
+	
+	
 	
 	else
 	{
@@ -988,8 +1035,7 @@ $(document).on("click", ".div-sysfolder", function() {
 
 
 
-//need to assign a dummy element because .css will work only if there is an element inside it. Otherwise, for the first call there wont be any element inside it and the command will fail.
-var g_highlighed_icon = "NONE";		
+	
 
 /************************************ONCLICK ICONS ************************************************************/	
 
@@ -1157,11 +1203,14 @@ $(document).on("click", ".div-prev-folder-button", function() {
 /**************************************************************************************************************************/
 /**************************************************************************************************************************/
 
+/******************** GLOBAL VARIABLES ************************************************************************************/
 
 
+//create a global array of app windows. this global array will maintain the windows opened at run time.
 
+var g_appwindow = new Array();
 
-
+/******************** END GLOBAL VARIABLES ************************************************************************************/
 
 /************************************ WINDOW OBJECT DEFINITION ************************************************************/
 
@@ -1178,9 +1227,6 @@ function Appwindow()
 
 
 
-//create a global array of app windows. this global array will maintain the windows opened at run time.
-
-var g_appwindow = new Array();
 
 /*****************************************FUNCTION OPEN WINDOWN **********************************************************/
 
@@ -1283,9 +1329,13 @@ $.fn.closeWindow = function () {
 
 
 
-/***********************************  FUNCTION CLOSE WINDOWN ************************************************/
+/***********************************  FUNCTION MAXIMIZE WINDOWN ************************************************/
 
 $.fn.maximizeWindow = function () {
+	
+	//unlike the function name indicates, this function is not only for maximizing windows.
+	//function name inidicates whats to be done when maximize button clicked. If windows is already maximized, need to resize it.
+	//if you have a better function name, you're welcome
 	
 	//get current window's sate
 	window_state = g_appwindow[1].window_state;
