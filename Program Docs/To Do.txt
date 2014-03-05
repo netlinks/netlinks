@@ -83,15 +83,11 @@ Time bound development starts! This is serious!
 		:copyto [optional]
 	- when on open space 
 [Done]		:create new folder,
-		:add new link, 
+[Done]		:add new link, 
 [Done]		:paste
 [Done]		:refresh
 		:upload[optional]
 		:properties [optional]
-
-- create function addfolder
-
-- change right click mentu postion as 'static'- relative to browser. of scrolled, it should move
 
 [2/26] - Extension - Add Button
 

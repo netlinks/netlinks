@@ -305,8 +305,7 @@ def addSystemFolders():
         'icon' : 'root_icon',
         'color' : 'root_color',
         'path' : "/", 
-        'view' : 'grid',
-        'parent_folder_key' : None      
+        'view' : 'grid'
     }
     
     # add root folder and capture they key

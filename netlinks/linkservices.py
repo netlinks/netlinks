@@ -24,7 +24,7 @@ def addLink(params):
     
     link.url = params['url']
     link.parent_folder = params['parent']    
-    link.name = 'Default'
+    link.name = params['name']
     link.description = 'Default'
     link.website = 'Default'    #need to generate this field automatically from the url
     link.file_type = 'Default'

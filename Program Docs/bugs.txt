@@ -10,6 +10,7 @@ GUI
 - [major] click on right click menu with sub items should not hide the entire mentu. It should just show the sub items.
 - [minor] while creating new folder, the name field should be editable
 - [critical] when renaming a parent folder all the subfolder's path should reflect the name change of it's ancestor folders new name 	
+- [minor] right click menu should be relative to starting of document, not relative to browser window. If scrolled, it should move above along with the place where rigth clicked
 
 
 Backend

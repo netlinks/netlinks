@@ -406,7 +406,25 @@ $.fn.wspaceRightClickHandler = function (ui){
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	else if ( action == "addfile" )
 	{
-		console.log("adding file");
+		
+		txt = "<form id='form-addfile'>Name: <input type='text' id='tbox-addfile-name' class='tbox-addfile-name'><br>Link: <input type='text' id='tbox-addfile-url' class='tbox-addfile-url'><br><input type='submit' value='Add'></form>";
+	
+		$.fn.openWindow(txt);
+		//It will be good idea to show a better input field other than the window.
+		
+		//attach evnet listener to the newly created form in new window
+		$( "#form-addfile" ).submit(function( event ) {
+			
+			//get new name of the folder
+			var file_name = $("#form-addfile").find("#tbox-addfile-name").val();
+			var url = $("#form-addfile").find("#tbox-addfile-url").val();
+		
+			$.fn.addFile(file_name, url, g_current_folder_key);
+					
+			//prevent browser default form submit action
+			event.preventDefault();
+		});
+		
 	}
 	
 	
@@ -418,20 +436,8 @@ $.fn.wspaceRightClickHandler = function (ui){
 	{
 		console.log("adding folder");
 		
-		var action = "addfolder";
-		var params = {
-			"parent_folder_key" : g_current_folder_key
-		};
-		
-		$.post("folder",{
-				action : action,
-				params : JSON.stringify(params)
-			},
-			function(data,status){
+		$.fn.addFolder(g_current_folder_key);
 			
-			//if success remove the deleted icon from the UI
-			$.fn.refreshCurrentFolderView();
-		});
 	}
 	
 	
@@ -537,7 +543,9 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 				else if ( action == "rename" )
 				{
 					
+					//get current name of the folder. this is to highlight the name in edit box
 					var current_name = $(icon).find(".div-thumbnail-desc-hook").html();
+					
 					
 					txt = "<form id='form-icon-rename' action='javascript:void(0);'><input id='tbox-icon-rename' class='tbox-icon-rename' type='text' value='"+current_name+"'></form>";
 					
@@ -548,15 +556,24 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 					
 					//attach evnet listener to the newly created form above
 					$( "#form-icon-rename" ).submit(function( event ) {
-					
+						
 						//get new name of the folder
 						var new_name = $(icon).find("#tbox-icon-rename").val();
-						
+					
 						//call fucntion to save the new name to the backend server
-						$.fn.renameFolder(icon_key, new_name);
+						$.fn.renameFolder(icon_key, new_name, icon);
 						
 						//prevent browser default form submit action
 						event.preventDefault();
+					});
+					
+					$( "#form-icon-rename" ).focusout(function( event ) {
+						
+						//get new name of the folder
+						var new_name = $(icon).find("#tbox-icon-rename").val();
+					
+						//call fucntion to save the new name to the backend server
+						$.fn.renameFolder(icon_key, new_name, icon);
 					});
 					
 					 
@@ -649,9 +666,9 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 				// if action is rename
 				else if ( action == "rename" )
 				{
-					
+					//get current name of the file. This is to show it highlighed while editing
 					var current_name = $(icon).find(".div-thumbnail-desc-hook").html();
-					
+										
 					txt = "<form id='form-icon-rename' action='javascript:void(0);'><input id='tbox-icon-rename' class='tbox-icon-rename' type='text' value='"+current_name+"'></form>";
 					
 					//change the name value with the form text field created above
@@ -659,17 +676,27 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 					//Get focus to the text box and select all text inside it
 					$(icon).find("#tbox-icon-rename").focus().select();
 					
-					//attach evnet listener to the newly created form above
+					//when submitting the save - ie-press enter - save the new name
 					$( "#form-icon-rename" ).submit(function( event ) {
+						
+						//get new name of the file
+						var new_name = $(icon).find("#tbox-icon-rename").val();
+						
+						//call fucntion to save the new name to the backend server
+						$.fn.renameFile(icon_key, new_name, icon);
+						
+						//prevent browser default form submit action
+						event.preventDefault();
+					});
+					
+					//when focus is out from the file name text field, save the new name
+					$( "#form-icon-rename" ).focusout(function( event ) {
 					
 						//get new name of the file
 						var new_name = $(icon).find("#tbox-icon-rename").val();
 						
 						//call fucntion to save the new name to the backend server
-						$.fn.renameFile(icon_key, new_name);
-						
-						//prevent browser default form submit action
-						event.preventDefault();
+						$.fn.renameFile(icon_key, new_name, icon);
 					});
 					
 				}
@@ -707,6 +734,46 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 
 
 /************************************END FUNCTION RIGHT CLICK MENU HANDLER ************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+/************************************ FUNCTION ADD FOLDER ************************************************************/
+
+$.fn.addFolder = function (folder_id) {
+	
+	var action = "addfolder";
+		var params = {
+			"parent_folder_key" : g_current_folder_key
+		};
+		
+		$.post("folder",{
+				action : action,
+				params : JSON.stringify(params)
+			},
+			function(data,status){
+			
+			//if success remove the deleted icon from the UI
+			$.fn.refreshCurrentFolderView();
+		});
+
+	
+
+};
+
+/************************************ END FUNCTION ADD FOLDER ************************************************************/
+
+
+
+
+
 
 
 
@@ -801,7 +868,7 @@ $.fn.moveFolder = function (object_key, target_folder_key) {
 
 /**************************** FUNCTION TO RENAME FOLDER ******************************************************/
 
-$.fn.renameFolder = function (folder_key, name) {
+$.fn.renameFolder = function (folder_key, name, icon) {
 	
 	var action = "updatefolder";
 	var params = {
@@ -816,7 +883,7 @@ $.fn.renameFolder = function (folder_key, name) {
 		},
 		function(data,status){
 			
-			$.fn.refreshCurrentFolderView();
+			$(icon).find(".div-thumbnail-desc-hook").html(name);
 		}
 	);
 
@@ -861,11 +928,39 @@ $.fn.deleteFolder = function (icon_key) {
 
 
 
+/*****************************************FUNCTION ADD FILE **********************************************************/
+
+$.fn.addFile = function (name, url, parent_folder) {
+	
+	var action = "addlink";
+	var params = {
+		"name" : name,
+		"url" : url,
+		"parent" : parent_folder
+	};
+	
+	
+	$.post("link",{
+			action : action,
+			params : JSON.stringify(params)
+		},
+		function(data,status){
+			
+			$.fn.closeWindow();
+			$.fn.refreshCurrentFolderView();
+			
+		}
+	);	
+	
+};
+ 
+/*****************************************FUNCTION ADD FILE **********************************************************/
 
 
 
 
-/*****************************************FUNCTION OPEN WINDOWN **********************************************************/
+
+/*****************************************FUNCTION OPEN FILE **********************************************************/
 
 $.fn.openFile = function (url) {
 	
@@ -892,7 +987,7 @@ $.fn.openFile = function (url) {
 };
 
 
-/*********************************** END FUNCTION OPEN WINDOWN ************************************************/
+/*********************************** END FUNCTION OPEN FILE ************************************************/
 
 
 
@@ -968,7 +1063,7 @@ $.fn.moveFile = function (object_key, target_folder_key) {
 
 /**************************** FUNCTION TO RENAME FILE ******************************************************/
 
-$.fn.renameFile = function (link_key, name) {
+$.fn.renameFile = function (link_key, name, icon) {
 	
 	var action = "updatelink";
 	var params = {
@@ -982,7 +1077,7 @@ $.fn.renameFile = function (link_key, name) {
 			params : JSON.stringify(params)
 		},
 		function(data,status){
-			$.fn.refreshCurrentFolderView();
+			$(icon).find(".div-thumbnail-desc-hook").html(name);
 		}
 	);
 		
@@ -1139,7 +1234,7 @@ $(document).on("mousedown", "#td-folder-container", function(event) {
 	else if (event.which == 3)  
 	{
 		
-		//if clipboard is not null make the paste in the right click menu active
+		//if clipboard is not null make the 'paste' menu in the right click menu active. otherwise it will be deactivated
 		if(g_clipboard["action"] != "")
 		{
 			$(".ul-wspace-right-click-menu li[action='paste']").removeClass("ui-state-disabled");		
