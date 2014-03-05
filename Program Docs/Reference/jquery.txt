@@ -1,0 +1,1 @@
+jQuery UI: Transfer Effect -> animates one elment to another object

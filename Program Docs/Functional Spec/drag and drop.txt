@@ -1,0 +1,22 @@
+when drag starts
+	turn off highlight of previously highlighted item
+	highlight the dragged icon
+[Done]	make icon translucent
+[Done]	increase z index to top
+
+when hover over droppable
+[Done]	highlight droppable if it is a folder. Not if it is a file
+	
+
+when leaves from over droppable
+[Done]	turn off highlight of droppable - meet condition above
+
+
+when drops on droppable
+[Done]	execute the move command
+[Done]	if successful - delete the dragged element
+	keep the highlight of droppable element
+		
+
+when drops not on droppable
+	keep the dropped element highlighted

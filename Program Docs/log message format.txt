@@ -1,0 +1,4 @@
+log format
+
+class.function name(): start
+function name: message

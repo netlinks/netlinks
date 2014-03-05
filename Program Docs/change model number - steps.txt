@@ -1,0 +1,26 @@
+
+
+Change Model Number of APs:
+
+1. Go to diag prompt
+	ESC
+	diag <diag passwd>
+2. Install MFG image. 
+	printenv
+	setenv ipaddr <ip>
+	setenv serverip <tftp-ip>
+	saveenv
+	progfw <MFG-image-file> <tftp-ip>
+	reset 
+  Press ESC
+  
+3. Change Model number
+	setenv mfg_hardware_model <model-name>
+
+4. Load INSTALL (DD) image. 
+	printenv
+	setenv ipaddr <ip>
+	setenv serverip <tftp-ip>
+	saveenv
+	progfw <INSTALL-image-file> <tftp-ip>
+	reset 

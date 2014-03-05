@@ -1,0 +1,25 @@
+cursor
+block/inline elements
+positioning - absolute/relative/fixed
+margin-border-padding
+* float:left; -> elements rearrange according to page size
+CSS Image Sprites -> to select section of an image
+box shadow
+text-shadow: 0px 0px 10px #FFFFFF;
+CSS3 Word Wrapping: p {word-wrap:break-word;}
+text-overflow:ellipsis;
+CSS3 Transitions
+CSS3 Animations
+positioning:
+	static - normal flow
+	fixed - relative to window
+	relative - relative to normal position
+	absolute - relative to parent
+
+#to give emboss effect to text
+text-shadow: 0 1px 0 rgb(241, 241, 241);
+background-color: rgb(219, 215, 215);
+
+#shadow around png object - not square
+img { png-shadow: 5px 5px 5px #222; }
+http://lineandpixel.com/blog/png-shadow

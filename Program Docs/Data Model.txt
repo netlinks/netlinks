@@ -1,0 +1,34 @@
+DATA MODELLING
+==============
+
+LINK
+- id : integer
+- name : string
+- description : string
+- URL : string
+- Website : string
+- System Folder : string
+- Date created : date
+- Parent: reference 			#reference to key of parent folder
+
+FOLDER
+- Name : string
+- Icon : string
+- Color : string
+- Date Created : date
+- Date Modified : date
+- Number of items in the folder : integer
+- Path to the folder : string		[note: could be calculated value]
+- view : integer
+- parent: reference						#reference to key of parent folder
+
+Note: Use 'parent' feature to get the tree structure
+
+USER
+ - Name  : String
+ - Nick Name : String
+ - Email  : String
+ - Address  : String
+ - Phone number  : integer
+ - isSignedUp  : boolian
+ 

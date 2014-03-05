@@ -1,0 +1,21 @@
+GUI
+====
+
+- [major] not able to disable graggable, reziable on fullscreen. iframe contents becomes transparent
+- [critical] window transitions (maximize, minimize, dragging) are not smooth. it has to be butter smooth, or remove transitions.
+- [major] wikipedia not allowing to register - looks issue is because register is called from the iframe --> check if x-options can be manipulated using extension.
+- [major] paste does not show pasted icon. need to wait  few milliseconds before refreshing the page
+- [major] dragging window control icons in fullscreen mode is breaking if dragging is fast
+- [minor] not able to resize window from left and top side. It is allowed only from right and down side of the window
+- [major] click on right click menu with sub items should not hide the entire mentu. It should just show the sub items.
+- [minor] while creating new folder, the name field should be editable
+- [critical] when renaming a parent folder all the subfolder's path should reflect the name change of it's ancestor folders new name 	
+
+
+Backend
+=======
+
+- [critical] deleting folders dont delete subfolders and files
+- [critical] copying folders does not copy sub folders and files
+- [major] if item not found in datastore, backend should inform it to the front end
+- [major] duplicate file/foldernames are allowed. it should not be allowed

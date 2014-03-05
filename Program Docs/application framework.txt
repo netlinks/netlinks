@@ -1,0 +1,10 @@
+when double click a link,
+
+post to '/app'
+	parameters
+		- filetype
+
+backend returns parameters
+	app-link
+
+front end draws a window with iframe in it. Passes the applink + url to iframe.

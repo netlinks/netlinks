@@ -1,0 +1,100 @@
+Version 1.0.0 - To Do
+=====================
+
+
+Phase 1
+=======
+
+[Done] 1. Learn Ajax interaction with Datastore
+
+[Done] 2. Data modeling
+
+[Done] 3. Define program modules - pages, classes, functions, Refine data model
+
+[Done] 4. UI on paper
+
+[Done] 5. Define priorities - order of work flow
+
+
+6. Start Coding
+
+[Done]- welcome()
+[Done]- signup()
+[Done]- adduser()
+[Done]- login()
+[Done]- logout()
+[Done]- Seggregate above logic to appropriate files
+[Done]- add folder, move folder, delete folder
+[Done]- display folder contents
+[Done]- update folder
+[Done]- logging mechanism 
+[Done]- clean up for existing and future - define mechanism for function status returns and clean up existing functions
+[Done]- add link
+[Done]- display link details when opening a folder
+[Done]- update link
+[Done]- delete link
+[Done]- move link
+[Done]- copy link
+
+UI
+====
+
+[Done]- basic layout
+[Done]- display system folder contents with icons
+[Done]- define mechanism to display contents - using javascript objects
+		
+[Done]- onclick on an item show details on detail section
+[Done]	-folder
+[Done]	-link
+[Done]- on click highlight the selected item
+[Done]- on double click folder - go inside folder
+[Done]- back button - to go back to prev folder
+
+Time bound development starts! This is serious!
+================================================
+
+2/11. In App window - Draggable/close/maximize/popup
+
+	[Now focus on only opening a link - will do app specific things later. Priority is get overall design complete]
+
+[Done]	- on double click link, open the link in new window - focus on functionality, will make it beautiful later
+[Done]	- default - windowed - title bar, translucent window borders, shadow behind, content in iframe, 
+[Done]	- resizable - draggable
+[Done]	- buttons - open in new tab, maxmize/resize, close
+[Done]	- maximize mode - draggable, translucent buttons
+[Done]	- ability to rearrange control buttons when window is maximized
+
+
+[Done] - drag and drop for moving items
+[Done]	- folder
+[Done]	- links
+[Done]	- re-arrange on drop [optional]
+
+
+[2/22] - right-click options 
+	- when on an item 
+[Done]		:open, 
+[Done]		:Cut,
+[Done]		:copy, 
+[Done]		:rename, 
+[Done]		:delete
+		:Properties [optional]
+		:moveto [optional]
+		:copyto [optional]
+	- when on open space 
+[Done]		:create new folder,
+		:add new link, 
+[Done]		:paste
+[Done]		:refresh
+		:upload[optional]
+		:properties [optional]
+
+- create function addfolder
+
+- change right click mentu postion as 'static'- relative to browser. of scrolled, it should move
+
+[2/26] - Extension - Add Button
+
+
+
+

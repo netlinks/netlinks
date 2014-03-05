@@ -1,0 +1,29 @@
+Interface definitions: 
+
+addfolder
+deletefolder
+getfoldercontents
+copyfolder
+movefolder
+
+updatefolder :
+==============
+
+	action = "updatefolder"
+	params =
+	{
+	
+		"folder_key":"folder_key"  #which folder to update
+		#all folder properties follows
+		"name":"name"	
+
+	}
+
+
+
+
+addlink
+deletelink
+copylink
+movelink
+updatelink

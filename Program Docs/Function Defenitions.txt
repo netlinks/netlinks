@@ -1,0 +1,80 @@
+class mainpage - when user visit page
+
+get:
+	if user not signed in:
+		redirect to login page
+		after login redirect to folder view
+		return
+	else:
+		if not signed up:
+			redirect to signup page. 
+			create new user in db
+			redirect to folder view
+		else:
+			render last folder view
+
+===========================================================================
+class Folder
+
+post(action, params):
+	
+	if action ="add":
+		addFolder(params)
+		
+	else if action = "get_folder_contents":
+		items = getFolderContents(params)
+		renderFolderPage(items)
+
+			
+addFolder(params):	
+	parent_key = ndb.key(Folder, user_id)  	#generate parent key from userid
+	folder = Folder(parent=parent_key)		#create Folder entity using with parent as above (parent = parent_key)
+	folder.Name = params.folder_name
+	folder.icon = default
+	folder.color = default
+	folder.date_c = now
+	folder.date_m = now
+	folder.n_items = 0
+	folder.path = calculate the path and place it here
+	folder.viewtype = default
+	folder.parent = params.parent
+	
+	status = folder.put()
+	
+	if status is success
+		return True
+	else
+		return False
+
+getFolderContents(params):
+		folder_key = ndb.Key(urlsafe=param.key) 
+		folder = my_key.get()
+		if folder fetch is failed, return status = False, message = folder not found
+		else continue
+		list = query folder items
+		encode list to JSON object
+		return JSON object, status = Ture, message = Success
+
+
+
+============================================================================	
+
+	
+	
+	
+	
+============================================================================
+action = add
+	params = [Parent, Folder Name]
+
+action = update
+	params = [id, Folder Name, Color, Icon]
+
+	delete
+	copy 
+	move
+	getfolderitems
+
+todo - define implemented functions properly
+
+=============================================================================================

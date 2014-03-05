@@ -1,0 +1,55 @@
+
+- array objects is not possbile
+- object with attribute values as array is possible
+- new line chars matters!
+
+
+JSON object - interface between getfolderitems()
+REST = /folder?action,params
+======================
+
+object = 
+'{"folders":[{"a":"1A","b":"1B"},{"a":"1A","b":"2B"}],"links":[{"a":"linksA","b":"link1B"},{"a":"link2a","b":"link2b"}]}'
+
+
+___________
+
+call back
+=========
+
+object.folder[1].id
+object.links[1].url
+
+
+class fld:
+	name="name"
+
+class lnk:
+	name="link"
+
+class obj:
+	var folders = []
+	var links = []
+
+fold1 = fld()
+link1 = lnk()
+
+fold1.name="jubair1"
+link1.name="newlink1"
+
+
+fold2 = fld()
+link2 = lnk()
+
+fold2.name="jubair2"
+link2.name="newlink2"
+
+obj.folders.append(fold1)
+obj.folders.append(fold2)
+
+obj.links.append(link1)
+obj.links.append(link2)
+
+
+
+

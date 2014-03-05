@@ -1,0 +1,71 @@
+Link Services
+=============
+
+- addLink(url, folder, name, description)   #to add a URL. Returns status(integer) 
+	status - 	0: success,	1: failure
+
+- updateLink(url, folder, name, description, id, content_type)	#to update a URL, Returns staus code
+	status - 	0: success,	1: failure
+
+- deleteLink(id) #to delete link. Return status code
+	status - 	0: success,	1: failure
+
+Folder Services
+===============
+	
+- createFolder(name,icon,color,parent)  #to create a folder, Returns status code
+	status - 	0: success,	1: failure
+	
+- updateFolder(id, parameter, value) #to update a folder, Returns staus code
+	status - 	0: success,	1: failure
+	
+- deleteFolder(id)  #to delete folder, Returns status code
+	status - 	0: success,	1: failure
+	[note] should delete associated files
+	[note] everything goes to trash folder
+
+- copyFolder(id, dest_path)  #to copy a folder, Returns status code
+	status - 	0: success,	1: failure
+	
+- moveFolder(id, dest_path)  #to move a folder, Returns status code
+	status - 	0: success,	1: failure
+
+- getFolderItems(id) #to provide contents of a folder, Returns list of URLs and folders in a folder
+
+- getSytemLocation(type, id)  #to retrieve location of an item in the system. Returns a string of location (\MyFiles\Videos).
+
+	
+User Services
+=============
+
+- addUser (Name, Nick Name, Email, Address, Phone number)  #to add user details, Returns staus code
+	status - 	0: success,	1: failure
+	
+- updateUser (id, Name, Nick Name, Email, Address, Phone number) #to update user, Returns staus code
+	status - 	0: success,	1: failure
+	
+- deleteUser (id)	#to delete user, Returns staus code
+	status - 	0: success,	1: failure
+	note]should delete associated data as well
+	
+###############################
+
+welcome service
+- welcome()  #to render signup page
+  if not signed in redirect to login page, else redirect to recent folder
+
+signup service
+- signUp(user details)  #to signup user
+	-> addUser()
+
+login service
+- login(id)  # to login user
+
+logout service
+- logout(id)  #to logout user
+
+     
+
+
+
+
