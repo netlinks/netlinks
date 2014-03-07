@@ -92,5 +92,9 @@ Time bound development starts! This is serious!
 [2/26] - Extension - Add Button
 
 
+- remove register page - just save email id in the user database.
+- confirm before delete
+
+
 
 

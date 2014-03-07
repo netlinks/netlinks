@@ -1,6 +1,6 @@
 cursor
 block/inline elements
-positioning - absolute/relative/fixed
+positioning - absolute/relative/fixed/static
 margin-border-padding
 * float:left; -> elements rearrange according to page size
 CSS Image Sprites -> to select section of an image
@@ -23,3 +23,7 @@ background-color: rgb(219, 215, 215);
 #shadow around png object - not square
 img { png-shadow: 5px 5px 5px #222; }
 http://lineandpixel.com/blog/png-shadow
+
+
+blurr effect
+filter: blur(strength=50);
