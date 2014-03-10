@@ -20,15 +20,18 @@ class MainPage(webapp2.RequestHandler):
 			renderWelcomePage(self)        #call for the function to render welcome page
 			return			
 		
-		elif isUserSignedUp(user.user_id()):	#If user is signed in but not registered, follow registration procedure
-			logging.info(' Mainpage.get(): User is signed in, but not registered, redirecting to signup page ')
-			renderSignupPage(self,user)		 #call for the function to render signup page	
+		#If user is signed in but not registered, register the user - add user to system and render folder page
+		elif isUserSignedUp(user.user_id()):	
+			addUser()   
+			renderTestFolderPage(self)   #call for the function to render folders of a user
+			
+			#renderSignupPage(self,user)		 #call for the function to render signup page	
 			return
 		
-		else:							#if user is signed in and already registered, redirect to folder view page		
-			logging.info(' Mainpage.get(): Registered user. Rendering folder page')
-			renderFolderPage(self)   #call for the function to render folders of a user
-			return
+		#If user is signedup and registed, directly render folder page
+		else:
+			renderTestFolderPage(self)
+		
 		
 ############################################# signup action  '/signup' ####################################################
 
@@ -87,8 +90,10 @@ class Test(webapp2.RequestHandler):
 			renderWelcomePage(self)        #call for the function to render welcome page
 			return		
 		
+		
+		#if user is logged in then..
 		logging.info('Test.get(): calling renderTestFolderPage module')
-		renderTestFolderPage(self)   #call for the function to render folders of a user
+		renderFolderPage(self)   #call for the function to render folders of a user
 		
 
 ############################################## Entry Point ! ################################################################

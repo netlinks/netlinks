@@ -191,8 +191,8 @@ td.td-middle-panel-container
 div.div-thumbnail-container
 {
 	float: left;
-	width: 110px;
-	height: 130px;
+	width: 100px;
+	height: 120px;
 	margin: 15px;	
 
 
@@ -213,8 +213,8 @@ div.div-thumbnail-container-highlight   /*to hightilgh the selected icon*/
     border-color: #3385FF";
     
     float: left;
-    width: 110px;
-    height: 130px;
+    width: 100px;
+    height: 120px;
     margin: 15px;   
 
 
@@ -228,8 +228,8 @@ div.div-thumbnail-container-droppable   /*to hightilgh when an element is dragge
     border-color: #3385FF";
     
     float: left;
-    width: 110px;
-    height: 130px;
+    width: 100px;
+    height: 120px;
     margin: 15px;   
 
 
@@ -250,14 +250,14 @@ div.div-thumbnail-icon
 
 img.img-thumbnail-folder-icon
 {
-	width:  107px;
-	height:  110px;
+	width:  97px;
+	height:  100px;
 }
 
 div.div-thumbnail-desc
 {
-	width: 108px;
-	height: 20px;
+	width: 98px;
+	height: 15px;
 	text-align:  center;
 	border:  0px;
 	overflow:  hidden;
@@ -266,8 +266,8 @@ div.div-thumbnail-desc
 
 img.img-thumbnail-file-icon
 {
-	width:  107px;
-	height:  110px;	
+	width:  97px;
+	height:  100px;	
 }
 
 

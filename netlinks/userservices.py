@@ -27,7 +27,7 @@ def getUser(user_id):
     return user_key.get()   #return the user object
 
 
-def addUser(page):
+def addUser():
     logging.info('addUser(): Start')
     
     user = users.get_current_user() #Get current user
@@ -39,11 +39,11 @@ def addUser(page):
     
     #assign form data to entity properties
     logging.info('addUser: adding user details')        
-    usr.user_name = page.request.get('user_name')
-    usr.nick_name = page.request.get('nick_name')
-    usr.email = page.request.get('email')
-    usr.address = page.request.get('address')
-    usr.phone = page.request.get('phone')
+    usr.user_name = None
+    usr.nick_name = user.nickname()
+    usr.email = user.email()
+    usr.address = None
+    usr.phone = None
     
     #Create system folders and store keys of system folders
     logging.info('addUser: adding system folders')   
@@ -61,7 +61,7 @@ def addUser(page):
     
     status = 'success'
     
-    page.response.out.write(status)
+    return status
          
 def updateUser():
     pass

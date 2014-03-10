@@ -7,7 +7,6 @@ get:
 		return
 	else:
 		if not signed up:
-			redirect to signup page. 
 			create new user in db
 			redirect to folder view
 		else:
