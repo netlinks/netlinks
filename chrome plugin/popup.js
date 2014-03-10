@@ -1,29 +1,26 @@
 var QUERY = 'kittens';
 
 var urlGenerator = {
-    getCurrentURL: function (url) {
+    getCurrentURL_: function (url) {
     chrome.tabs.getSelected(null, function(tab) {
-		alert(tab.url);
+		var action = "addlink"
+				var params = {
+					"url" : tab.url,
+					"name" : "testlink",
+					"parent" : "ag1kZXZ-bmV0LWxpbmtzcjQLEgZGb2xkZXIiFTE4NTgwNDc2NDIyMDEzOTEyNDExOAwLEgZGb2xkZXIYgICAgICAgAkM"
+				}
+				
+				$.post("http://localhost:8080/link",{
+      				action : action,
+       				params : JSON.stringify(params)
+      			},
+      			function(data,status){
+      				console.log("Success");
+      			});
 	});;
   }
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-  urlGenerator.getCurrentURL();
-});
-
-chrome.contextMenus.create({
-    id: 'addlinktonetlink',  
-    title: 'Add link to Netlink',
-    contexts: ['all']
-}, function () {
-    if (chrome.runtime.lastError) {
-        alert('ERROR: ' + chrome.runtime.lastError.message);
-    }
-});
-
-chrome.contextMenus.onClicked.addListener(function(info, tab) {
-    if (info.menuItemId === 'addlinktonetlink') {
-        alert(tab.url);
-    }
+  urlGenerator.getCurrentURL_();
 });
