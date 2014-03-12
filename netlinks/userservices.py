@@ -2,8 +2,10 @@
 from google.appengine.api import users
 from google.appengine.ext import ndb
 
-from models import User    #import all datastore models from models.py
-from folderservices import *
+import logging
+
+from models import User    #import User models from models.py
+from folderservices import addSystemFolders
 
 
 ################################################### User Services ###############################################################
@@ -13,7 +15,7 @@ def genUserKey(user_id):
     return ndb.Key(User, user_id)
 
 def isUserSignedUp(user_id):        #Function to check if user is already signed up
-    user_key=genUserKey(user_id)  #create key for the user from user_id of the user
+    user_key = genUserKey(user_id)  #create key for the user from user_id of the user
     
     if  user_key.get():  #if user does not exists in database return false;
         return False
@@ -23,8 +25,15 @@ def isUserSignedUp(user_id):        #Function to check if user is already signed
 
 #generic utility to get user object from user id
 def getUser(user_id):
-    user_key=genUserKey(user_id)  #create key for the user from user_id of the user
+    user_key = genUserKey(user_id)  #create key for the user from user_id of the user
     return user_key.get()   #return the user object
+
+#utility to get current logged in user
+def getCurrentUser():
+    user_id = users.get_current_user().user_id()
+    user_key = genUserKey(user_id)  #create key for the user from user_id of the user
+    user = user_key.get()
+    return user   #return the user object
 
 
 def addUser():
@@ -49,7 +58,7 @@ def addUser():
     logging.info('addUser: adding system folders')   
     sys_folder_keys = addSystemFolders() 
     
-    logging.info('addUser: storing system folder')   
+    logging.info('addUser: storing system folder keys in user object')   
     usr.sysfolder_root = sys_folder_keys['root']
     usr.sysfolder_mydrive = sys_folder_keys['mydrive']
     usr.sysfolder_videos = sys_folder_keys['videos']

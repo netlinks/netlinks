@@ -5,7 +5,8 @@ import logging
 import json
 import datetime
 
-from models import *
+from models import Link
+from userservices import getCurrentUser
 
 
 
@@ -18,25 +19,54 @@ def genLinkParentKey():        #Function to create key for Link class
 def addLink(params):
     logging.info('addLink(): Start')
     
+    #get current logged in user datastore object from user's ID
+    usr = getCurrentUser()  
+    
     link = Link(parent=genLinkParentKey()) #Create a datastore entity with parent as the key generated above
     
     #add Link details to the object
-    
-    link.url = params['url']
-    link.parent_folder = params['parent']    
-    link.name = params['name']
-    link.description = 'Default'
+    if 'url' in params:
+        link.url = params['url']
+    else:
+        link.ur = None
+        
+    if 'parent' in params:
+        if params['parent'].get():                          #check if provded parent folder exists in database
+            link.parent_folder = params['parent']
+        else:
+            logging.info('addLink: parent folder not found. Adding in mydrive')
+            link.parent_folder = usr.sysfolder_mydrive      #if provided parent is not present in database, mydrive as parent folder        
+    else:
+        link.parent_folder = usr.sysfolder_mydrive              #if there is no parent, make my drive as parent   
+            
+    if 'name' in params:
+        link.name = params['name']
+    else:
+        link.name = 'Default'
+        
+    if 'desc' in params:
+        link.description = params['desc']
+    else:
+        link.description = 'Default'
+        
     link.website = 'Default'    #need to generate this field automatically from the url
-    link.file_type = 'Default'
+    
+    if 'file_type' in params:
+        link.file_type = params['file_type']
+    else:
+        link.file_type = 'Default'
+    
+    
     link.date_c = datetime.datetime.now()
     link.date_m = datetime.datetime.now()
-    link.path = 'Default'
+    
+    link.path = link.parent_folder.get().path+"/"
     
     #save the link object
     link.put()
     
-    #increment parent folder's items count and save. 
-    if params['parent'] is not None:
+    #increment parent folder's items count and save. Do this only if parent is present in the parameters and it is in the system
+    if params['parent'] is not None and params['parent'].get():
         params['parent'].get().n_items += 1 
         params['parent'].get().put()
     

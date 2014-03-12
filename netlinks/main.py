@@ -1,11 +1,14 @@
+from google.appengine.api import users
+
 import webapp2
 import logging
 
-from models import *	#import all datastore models from models.py
-from renderpages import *   #import all functions from renderpages.py
-from userservices import *   #import all functions from userservices.py
-from folderservices import *   #import all functions from folderservices.py
-from linkservices import *
+
+#import only required functions. Do not use wild import (*)
+from renderpages import renderWelcomePage, renderFolderPage, renderTestFolderPage    
+from userservices import addUser, isUserSignedUp    
+from folderservices import folderServices   
+from linkservices import linkServices
 
 ############################################ USER ACTION HANDLERS #####################################################
 
@@ -23,14 +26,14 @@ class MainPage(webapp2.RequestHandler):
 		#If user is signed in but not registered, register the user - add user to system and render folder page
 		elif isUserSignedUp(user.user_id()):	
 			addUser()   
-			renderTestFolderPage(self)   #call for the function to render folders of a user
+			renderFolderPage(self)   #call for the function to render folders of a user
 			
 			#renderSignupPage(self,user)		 #call for the function to render signup page	
 			return
 		
 		#If user is signedup and registed, directly render folder page
 		else:
-			renderTestFolderPage(self)
+			renderFolderPage(self)
 		
 		
 ############################################# signup action  '/signup' ####################################################
@@ -46,8 +49,14 @@ class Signup(webapp2.RequestHandler):
 ############################################ FOLDER ACTION HANDLERS #####################################################
 
 class Folder(webapp2.RequestHandler):
-		
+	
 	def post(self):
+		user = users.get_current_user()		#Check if user is already signed
+		
+		if not user: 						#If user is not signed in dont do anything
+			logging.info(' Mainpage.get(): User is not signed in, exiting')
+			return		
+		
 		logging.info('Folder.post(): calling folderServices module')		
 		folderServices(self)		
 
@@ -56,6 +65,13 @@ class Folder(webapp2.RequestHandler):
 class Link(webapp2.RequestHandler):
 		
 	def post(self):
+		
+		user = users.get_current_user()		#Check if user is already signed
+		
+		if not user: 						#If user is not signed in dont do anything
+			logging.info(' Mainpage.get(): User is not signed in, exiting')
+			return		
+		
 		logging.info('Link.post(): calling linkServices module')		
 		linkServices(self)		
 
@@ -64,6 +80,13 @@ class Link(webapp2.RequestHandler):
 class App(webapp2.RequestHandler):
 		
 	def post(self):
+		
+		user = users.get_current_user()		#Check if user is already signed
+		
+		if not user: 						#If user is not signed in dont do anything
+			logging.info(' Mainpage.get(): User is not signed in, exiting')
+			return		
+		
 		appid = self.request.get('appid')
 		url = self.request.get('params')
 		
@@ -93,7 +116,7 @@ class Test(webapp2.RequestHandler):
 		
 		#if user is logged in then..
 		logging.info('Test.get(): calling renderTestFolderPage module')
-		renderFolderPage(self)   #call for the function to render folders of a user
+		renderTestFolderPage(self)   #call for the function to render folders of a user
 		
 
 ############################################## Entry Point ! ################################################################

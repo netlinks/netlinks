@@ -41,8 +41,8 @@ def renderFolderPage(page):
     greeting = user.nickname()
     logout_url = users.create_logout_url('/')
 
-    #get current user datastore object from user ID
-    usr = getUser(user.user_id())   
+    #get current user datastore object 
+    usr = getCurrentUser()   
 
     #get system folder keys for this user and covert keys to urlsafe
     folder_mydrive = usr.sysfolder_mydrive.get()
@@ -84,8 +84,8 @@ def renderTestFolderPage(page):
     greeting = user.nickname()
     logout_url = users.create_logout_url('/')
 
-    #get current user datastore object from user ID
-    usr = getUser(user.user_id())   
+    #get current logged in user 
+    usr = getCurrentUser()   
 
     #get system folder keys for this user and covert keys to urlsafe
     folder_mydrive = usr.sysfolder_mydrive.get()

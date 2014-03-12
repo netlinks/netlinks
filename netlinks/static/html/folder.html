@@ -1,397 +1,123 @@
+
+<!doctype html>
 <html>
-	<head>
-	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<head>
+
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.10.4.custom.css">
+
+
+
+
+<script src="/scripts/folder.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/folder.css">
+
+
+</head>
+
+<body oncontextmenu="return false;">
 	
-	<script type="text/javascript">
+	<table class="tb-top-pace-holder">
+		<tr>
+			<td class="td-l1-header">
+				<div class="div-logout-container">
+					<table class="tb-header-contents">
+						<tr>
+							<td class="td-header-logo-container">Logo</td>
+							<td class="td-header-middle-container">
+								<div class="div-prev-folder-button" id="div-prev-folder-button" data-key="none">
+									<img class="img-prev-folder-button" src="/images/back-arrow.png" alt="prev Folder">
+								</div>
+								<div class="div-current-folder-path" id="div-current-folder-path">
+									
+								</div>
+							</td>
+							<td class="td-header-right-container">{{message}}<br><a href={{logout_url}}>Logout</a></td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td class="td-window-body-contents" id="td-window-body-contents">
+				<table class="tb-middle-place-holder">
+					<tr>
+						<td class="td-left-panel-container">
+							<div class="div-sysfolders-container">
+								<div class="div-sysfolder" id="{{folder_mydrive.key.urlsafe()}}"><div class ="div-sysfolder-content">Mydrive</div></div>
+								<div class="div-sysfolder" id="{{folder_videos.key.urlsafe()}}"><div class ="div-sysfolder-content">Videos</div></div>
+								<div class="div-sysfolder" id="{{folder_articles.key.urlsafe()}}"><div class ="div-sysfolder-content">Articles</div></div>
+								<div class="div-sysfolder" id="{{folder_images.key.urlsafe()}}"><div class ="div-sysfolder-content">Images</div></div>
+								<div class="div-sysfolder" id="{{folder_apps.key.urlsafe()}}"><div class ="div-sysfolder-content">Apps</div></div>
+							</div>
+						</td>
+						<td class="td-middle-panel-container" id="td-folder-container">
+							Welcome
+						</td>
+						<td class="td-right-panel-container" id="td-properties-container">info</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
 	
 	
-		$(document).ready(function(){
-				
-		
-			$(".copylink").click(function(){
-				var action = "copylink"
-				var params = {
-					"link_key" : document.getElementById("copy_link_key").value,
-					"target_folder_key" : document.getElementById("copy_dest_folder_key").value	
-				}
-				
-				
-				$.post("link",{
-      				action : action,
-       				params : JSON.stringify(params)
-      			},
-      			function(data,status){
-      			alert(data)
-      			}); 
-      			 
-			});
-			
-			
-			
-						
-			
-			$(".movelink").click(function(){
-				var action = "movelink"
-				var params = {
-					"link_key" : document.getElementById("move_link_key").value,
-					"target_folder_key" : document.getElementById("move_dest_folder_key").value	
-				}
-				
-				
-				$.post("link",{
-      				action : action,
-       				params : JSON.stringify(params)
-      			},
-      			function(data,status){
-      			alert(data)
-      			}); 
-      			 
-			});
-			
-			
-			
-			
-			
-			$(".updatelink").click(function(){
-				var action = "updatelink"
-				var params = {
-					"link_key" : document.getElementById("update_link_key").value,
-					"url" : document.getElementById("update_link_url").value	
-				}
-				
-				
-				$.post("link",{
-      				action : action,
-       				params : JSON.stringify(params)
-      			},
-      			function(data,status){
-      			alert(data)
-      			});
-      			 
-			});
-
-
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			$(".deletelink").click(function(){
-				var action = "deletelink"
-				var params = {
-					"link_key" : document.getElementById("delete_link_key").value
-				}
-				
-				$.post("link",{
-      				action : action,
-       				params : JSON.stringify(params)
-      			},
-      			function(data,status){
-      			alert(data)
-      			});
-      			 
-			});
-
-
-
-
-
-
-
-
-			$(".addlink").click(function(){
-				var action = "addlink"
-				var params = {
-					"url" : document.getElementById("link_url").value,
-					"parent" : document.getElementById("parent_folder").value,
-				}
-				
-				$.post("link",{
-      				action : action,
-       				params : JSON.stringify(params)
-      			},
-      			function(data,status){
-      				alert(data)
-      			});
-	      			 
-			});
-		
-		
-		
-			$(".updatefolder").click(function(){
-				var action = "updatefolder"
-				var params = {
-					"folder_key" : document.getElementById("update_folder_key").value,
-					"new_name" : document.getElementById("update_folder_name").value
-				}
-				
-				$.post("folder",{
-      				action : action,
-       				params : JSON.stringify(params)
-      			},
-      			function(data,status){
-      				alert(data)
-      			});
-	      			 
-			});
-			
-			
-		
-		
-			$(".addfolder").click(function(){
-				var action = "addfolder"
-				var params = {
-					"parent_folder_key" : this.parentNode.id,
-					"name" : document.getElementById("folder_name").value,
-					"view" : "Default",
-					"icon" : "Default",
-					"color" : "Defaut",
-					"path" : "default",					
-				}
-				
-				$.post("folder",{
-      				action : action,
-       				params : JSON.stringify(params)
-      			},
-      			function(data,status){
-      			});
-      			 
-			});
-			
-			
-			
-			$(".viewfolder").click(function(){
-				var action = "viewfolder"
-				var params = {
-					"folder_key" : this.parentNode.id,
-				}
-				
-				$.post("folder",{
-      				action : action,
-       				params : JSON.stringify(params)
-      			},
-      			function(data,status){
-      			
-      				folder_objs = JSON.parse(data)
-      				var txt=""
-      				for (i in folder_objs)
-					{
-						if (i=="folder")
-						{
-							for (j in folder_objs[i])
-					        	{
-					          		txt = txt+"Folder: " + folder_objs[i][j].name + ",  Key: " + folder_objs[i][j].key + "<br>" 
-					        	}
-					   	}
-					   	else if (i=="link")
-					   	{
-					   		for (j in folder_objs[i])
-					        	{
-					          		txt = txt+"Link: " + folder_objs[i][j].url + ",  Key: " + folder_objs[i][j].key +  "<br>" 
-					        	}
-					   	}
-					   	
-					} 
-      			      
-      			      				
-      				document.getElementById("foldercontainer").innerHTML = txt
-      			
-      			});
-				
-			});
-			
-			
-			$(".deletefolder").click(function(){
-				var action = "deletefolder"
-				var params = {
-					"folder_key" : document.getElementById("delete_folder_key").value
-				}
-				
-				
-				
-				$.post("folder",{
-      				action : action,
-       				params : JSON.stringify(params)
-      			},
-      			function(data,status){
-      			alert(data)
-      			});
-      			 
-			});
-			
-			
-			
-			
-			$(".movefolder").click(function(){
-				var action = "movefolder"
-				var params = {
-					"folder_key" : document.getElementById("move_folder_key").value,
-					"target_folder_key" : document.getElementById("move_folder_to").value
-				}
-				
-
-				
-				$.post("folder",{
-      				action : action,
-       				params : JSON.stringify(params)
-      			},
-      			function(data,status){
-      			alert(data)
-      			});
-     			 
-			});
-			
-			
-			
-			
-			
-			
-		});
-		
-	</script>
 	
-		
-	</head>
-	<body>
+
 	
-		<h2>{{message}}</h2>
-		<br>
-		<div class="r1">
-			<div class="logo">Logo</div>
-			<div class="path">Path: {{path}}</div>
-			<div class="addbutton">
-				<button class="addbutton" id=addurl>Add</button>
+	<!-- div to display the link contents -->
+	<div class="div-app-window" id="div-app-window-1">
+		<div class="div-app-window-title" id="div-app-window-title-1">
+			<div class="div-app-window-control-buttons" id="div-app-window-control-buttons-1">
+				<div class="div-app-window-close-button">X</div>
+				<div class="div-app-window-full-screen-button">O</div>
+				<div class="div-app-window-new-window-button">^</div>
+				
 			</div>
 		</div>
-		<hr>
-		<div class="r2">
-			<div class="r2-c1">
-				<div class="folderselector">
-					<div class = "sysfolder" id="{{folder_mydrive.key.urlsafe()}}" name="mydrive">
-						mydrive :
-						<button class="addfolder">Add Folder</button>
-						<button class="viewfolder">View Folder</button>
-						n_items: {{folder_mydrive.n_items}}, 
-						key: {{folder_mydrive.key.urlsafe()}}, 
-					</div>
-				</div>
-				<div class="folderselector">
-					<div class = "sysfolder" id="{{folder_videos.key.urlsafe()}}">
-						videos  :
-						<button class="addfolder">Add Folder</button>
-						<button class="viewfolder">View Folder</button>
-						n_items: {{folder_videos.n_items}}, 
-						key: {{folder_videos.key.urlsafe()}}
-					</div>
-				</div>
-				<div class="folderselector">
-					<div class = "sysfolder" id="{{folder_articles.key.urlsafe()}}">
-						articles :
-						<button class="addfolder">Add Folder</button>
-						<button class="viewfolder">View Folder</button>
-						n_items: {{folder_articles.n_items}}, 
-						key: {{folder_articles.key.urlsafe()}}
-					</div>
-				</div>
-				<div class="folderselector">
-					<div class = "sysfolder" id="{{folder_images.key.urlsafe()}}">
-						images :
-						<button class="addfolder">Add Folder</button>
-						<button class="viewfolder">View Folder</button>
-						n_items: {{folder_images.n_items}}, 
-						key: {{folder_images.key.urlsafe()}}
-					</div>
-				</div>
-				<div class="folderselector">
-					<div class = "sysfolder" id="{{folder_apps.key.urlsafe()}}">
-						apps :
-						<button class="addfolder">Add Folder</button>
-						<button class="viewfolder">View Folder</button>
-						n_items: {{folder_apps.n_items}}, 
-						key: {{folder_apps.key.urlsafe()}}
-					</div>
-				</div>
-				<input type="text" id="folder_name">
-			</div>
-			<hr>
-			<div class="r2-c2">
-				<div id="foldercontainer">folder1</div>
-			</div>
-			
-			
-			
-			<br><hr>
-			
-			Copy Link<br>
-			Link Key <input type="text" id="copy_link_key"><br>
-			Destination Folder <input type="text" id="copy_dest_folder_key"><br>
-			<button class="copylink">Copy Link</button><br>
-			<br>
-			
-			
-			Move Link<br>
-			Link Key <input type="text" id="move_link_key"><br>
-			Destination Folder <input type="text" id="move_dest_folder_key"><br>
-			<button class="movelink">Move Link</button><br>
-			<br>
-			
-			Update Link<br>
-			Link Key<input type="text" id="update_link_key"><br>
-			New URL<input type="text" id="update_link_url"><br>
-			<button class="updatelink">Update Link</button><br>
-			<br>
-			
-			Delete Link<br>
-			<input type="text" id="delete_link_key"><br>
-			<button class="deletelink">Delete Link</button><br>
-			<br>
-			
-			Add Link<br>
-			URL: <input type="text" id="link_url"><br>
-			Parent Folder: <input type="text" id="parent_folder"><br>
-			<button class="addlink">Save</button><br>
-			<br>
-			
-			Delete Folder<br>
-			<input type="text" id="delete_folder_key"><br>
-			<button class="deletefolder">Delete Folder</button><br>
-			<br>
-			
-			move folder<br>
-			Folder: <input type="text" id="move_folder_key"><br>
-			Move to: <input type="text" id="move_folder_to"><br>
-			<button class="movefolder">Move</button><br>
-			<br>
-			
-			udpate folder<br>
-			Folder: <input type="text" id="update_folder_key"><br>
-			Name: <input type="text" id="update_folder_name"><br>
-			<button class="updatefolder">Update</button>
-			
-			
-			
-			
-			<hr>
-			<div class="r2-c3">
-				<div id="itemname">name:</div>
-				<div id="datecreated">created:</div>
-				<div id="datemodified">modified:</div>
-				<div id="path">path:</div>
-			</div>
-		</div>	
-		<hr>
-		<div class="r3">
-			<div class="window">Window1</div>
-		</div>
-		<br>
+		<div class="div-app-window-content"  id="div-app-window-content-1">
+			<iframe class="iframe-app-content" src="" id="iframe-app-content-1"> </iframe>
+		</div>		
+	</div>
 	
-		<hr>
-		<a href={{logout_url}}>Logout</a>
+	
+	
+	
+	
+	
+	
+	
+	
+	<ul class="ul-icon-right-click-menu" id="ul-icon-right-click-menu">
+	  <li action="open"><a href="#"><span> </span>Open</a></li>
+	  <li>-</li>
+	  <li action="copy"><a href="#"><span> </span>Copy</a></li>
+	  <li action="cut"><a href="#"><span> </span>Cut</a></li>
+	  <li>-</li>
+	  <li action="rename"><a href="#"><span> </span>Rename</a></li>
+	  <li>-</li>
+	  <li action="delete"><a href="#"><span> </span>Delete</a></li>
+	</ul>
+	
 		
+	<ul class="ul-wspace-right-click-menu" id="ul-wspace-right-click-menu">
+	  <li action="addnew">
+	  	<a href="#"><span> </span>Add New</a>
+	  	<ul>
+	  		<li action="addfile"><a href="#"><span> </span>Link</a></li>
+	  		<li action="addfolder"><a href="#"><span> </span>Folder</a></li>
+	  	</ul>
+	  </li>
+	  <li>-</li>
+	  <li action="refresh"><a href="#"><span> </span>Refresh</a></li>
+	  <li>-</li>
+	  <li class="ui-state-disabled" action="paste"><a href="#"><span> </span>Paste</a></li>
+	</ul>
+	
+	
+	
 		
-	</body>
+	
+</body>
 </html>

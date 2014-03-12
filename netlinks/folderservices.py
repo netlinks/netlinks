@@ -6,8 +6,8 @@ import logging
 import json
 import datetime
 
-from models import *
-from userservices import *
+from models import Folder, Link
+
 
 ###########################   Folder Services   ###############################
 
@@ -15,10 +15,30 @@ def genFolderParentKey():        #Function to create key for user class
     user_id = users.get_current_user().user_id()
     return ndb.Key(Folder, user_id)
 
+
+# seperate function for adding root folder is created to make logic simple. Otherwise there will be complications to take care when parent is null and path is /
+def addRootFolder():
+    logging.info('addRootFolder(): Start')
+    
+    folder = Folder(parent=genFolderParentKey()) #Create a datastore entity with parent as the key generated above
+    
+    #No need of param checks as the call is guaranteed to be internal.
+    folder.name = "root"
+    folder.icon = None
+    folder.color = None
+    folder.date_c = datetime.datetime.now()
+    folder.date_m = datetime.datetime.now()
+    folder.n_items = 0         #this value needs to be calculated and populated.
+    folder.view = None
+    folder.path = '/'
+    folder.parent_folder = None
+    
+    return folder.put()
+
+
 def addFolder(params):
     logging.info('addFolder(): Start')
-    user_id = users.get_current_user().user_id() #Get current user's id    
-    
+        
     folder = Folder(parent=genFolderParentKey()) #Create a datastore entity with parent as the key generated above
         
     #assign form data to entity properties
@@ -55,9 +75,11 @@ def addFolder(params):
         params['parent_folder_key'].get().put()
         
     else:                                                       #if no parent folder mentioned, set parent as mydrive        
-        folder.parent_folder = None                             #TODO need to set parent as 'mydrive' 
-        folder.path = "/"
-    
+        #folder.parent_folder = usr.sysfolder_mydrive            #TODO need to set parent as 'mydrive' 
+        #folder.path = params['parent_folder_key'].get().path + folder.name + '/'    #calculate path from parent folder and save - parent folder path + my name
+        
+        ###### Add folder always have to have a parent. Otherwise it will not be added
+        return
         
     return folder.put()     #save the folder details and return the key
     
@@ -299,17 +321,9 @@ def getFolderContents(params):
 def addSystemFolders():
     logging.info('addSystemFolders(): Start')
     
-    #set parameters for root folder
-    root = {
-        'name' : 'root',
-        'icon' : 'root_icon',
-        'color' : 'root_color',
-        'path' : "/", 
-        'view' : 'grid'
-    }
-    
+
     # add root folder and capture they key
-    root_key = addFolder(root)  
+    root_key = addRootFolder()  
     
     #set parameters for other system folder. set parent as root key
     mydrive = {
