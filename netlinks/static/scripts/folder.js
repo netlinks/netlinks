@@ -1,8 +1,6 @@
 $( document ).ready( function() {  //this is to make sure the script starts only after DOM is loaded and ready
 
 
-
-
 /*************** GLOBAL VARIABLES *************************/
 
 //this global variable is to store current folder being displayed. This will be pushed to g_prev_folder_key_stack. This is to enable back button functionality
@@ -189,22 +187,24 @@ $.fn.displayFolderContents = function (key) {
 	$.post("folder",{
 			action : action,
 			params : JSON.stringify(params)
-		},
-		function(data,status){
-			
-			//on response from the server follow below procedure
-			
-			//conver the jason data in the server response to javascript object
-			folder_contents = JSON.parse(data);
-			
-			//draw icons from the server response
-			$.fn.drawIcons(data, status, folder_contents);
-			
-			//display  path of the current displayed folder in folder path area besides the back button. Pass the current folder's path
-			$.fn.displayFolderPath(folder_contents["current_folder"].path);			
-			
-		}
-	);
+	})
+	.done(function(data,status){
+		
+		//on response from the server follow below procedure
+		
+		//conver the jason data in the server response to javascript object
+		folder_contents = JSON.parse(data);
+		
+		//draw icons from the server response
+		$.fn.drawIcons(data, status, folder_contents);
+		
+		//display  path of the current displayed folder in folder path area besides the back button. Pass the current folder's path
+		$.fn.displayFolderPath(folder_contents["current_folder"].path);			
+		
+	})
+	.fail(function() {
+		console.log("view folder post failed");
+	});
 };
 
 /************************************END FUNCTION - DISPLAY FOLDER CONTENTS************************************************************/
@@ -750,21 +750,22 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 $.fn.addFolder = function (folder_id) {
 	
 	var action = "addfolder";
-		var params = {
-			"parent_folder_key" : g_current_folder_key
-		};
-		
-		$.post("folder",{
-				action : action,
-				params : JSON.stringify(params)
-			},
-			function(data,status){
-			
-			//if success remove the deleted icon from the UI
-			$.fn.refreshCurrentFolderView();
-		});
-
+	var params = {
+		"parent_folder_key" : g_current_folder_key
+	};
 	
+	$.post("folder",{
+			action : action,
+			params : JSON.stringify(params)
+	})
+	.done(function(data,status){
+		
+		//if success remove the deleted icon from the UI
+		$.fn.refreshCurrentFolderView();
+	})
+	.fail(function(){
+		console.log("addfolder post failed");
+	});
 
 };
 
@@ -819,9 +820,12 @@ $.fn.copyFolder = function (object_key, target_folder_key) {
 	$.post("folder",{
 		action : action,
 		params : JSON.stringify(params)
-	},
-	function(data,status){
+	})
+	.done(function(data,status){
 		$.fn.refreshCurrentFolderView();
+	})
+	.fail(function(){
+		console.log("copyfolder post failed");
 	}); 
 
 };
@@ -850,9 +854,12 @@ $.fn.moveFolder = function (object_key, target_folder_key) {
 	$.post("folder",{
 		action : action,
 		params : JSON.stringify(params)
-	},
-	function(data,status){
+	})
+	.done(function(data,status){
 		$.fn.refreshCurrentFolderView();
+	})
+	.fail(function(){
+		console.log("movefolder post failed");
 	}); 
 
 };
@@ -880,12 +887,14 @@ $.fn.renameFolder = function (folder_key, name, icon) {
 	$.post("folder",{
 			action : action,
 			params : JSON.stringify(params)
-		},
-		function(data,status){
+	})
+	.done(function(data,status){
 			
 			$(icon).find(".div-thumbnail-desc-hook").html(name);
-		}
-	);
+	})
+	.fail(function(){
+		console.log("updatefolder post failed");
+	});
 
 	
 };
@@ -911,13 +920,15 @@ $.fn.deleteFolder = function (icon_key) {
 	$.post("folder",{
 			action : action,
 			params : JSON.stringify(params)
-		},
-		function(data,status){
+	})
+	.done(function(data,status){
 			
 			//if success remove the deleted icon from the UI
 			$("#" + icon_key).remove();
-		}
-	);
+	})
+	.fail(function(){
+		console.log("deletefolder post failed");
+	});
 	
 };
 
@@ -943,14 +954,14 @@ $.fn.addFile = function (name, url, parent_folder) {
 	$.post("link",{
 			action : action,
 			params : JSON.stringify(params)
-		},
-		function(data,status){
-			
-			$.fn.closeWindow();
-			$.fn.refreshCurrentFolderView();
-			
-		}
-	);	
+	})
+	.done(function(data,status){			
+		$.fn.closeWindow();
+		$.fn.refreshCurrentFolderView();
+	})
+	.fail(function(){
+		console.log("addlink post failed");
+	});	
 	
 };
  
@@ -966,24 +977,26 @@ $.fn.openFile = function (url) {
 	
 	
 	$.post("app",{
-					appid : "linkviewer",
-					params : url
-			},
-			function(data,status){
-				
-				//TODO when multitasking is to be enabled, new app window have to be created.
-				
-				//response from the server needs to be pushed in the new window's iframe
-				var app_url = data;
-				
-				//Make window content from the server response
-				txt = "<iframe class='iframe-app-content' id='iframe-app-content-1' src='"+ app_url +"'></iframe>";
-				
-				//open widow with the content from the server
-				$.fn.openWindow(txt);
-				
-			}
-	); 	
+			appid : "linkviewer",
+			params : url
+	})
+	.done(function(data,status){
+		
+		//TODO when multitasking is to be enabled, new app window have to be created.
+		
+		//response from the server needs to be pushed in the new window's iframe
+		var app_url = data;
+		
+		//Make window content from the server response
+		txt = "<iframe class='iframe-app-content' id='iframe-app-content-1' src='"+ app_url +"'></iframe>";
+		
+		//open widow with the content from the server
+		$.fn.openWindow(txt);
+		
+	})
+	.fail(function(){
+		console.log("linkviewer post failed");
+	}); 	
 };
 
 
@@ -1008,11 +1021,13 @@ $.fn.copyFile = function (object_key, target_folder_key) {
 	$.post("link",{
 			action : action,
 			params : JSON.stringify(params)
-		},
-		function(data,status){
+	})
+	.done(function(data,status){
 			$.fn.refreshCurrentFolderView();
-		}
-	); 
+	})
+	.fail(function(){
+		console.log("copylink post failed");
+	}); 
 
 };
 
@@ -1044,11 +1059,13 @@ $.fn.moveFile = function (object_key, target_folder_key) {
 	$.post("link",{
 			action : action,
 			params : JSON.stringify(params)
-		},
-		function(data,status){
-			$.fn.refreshCurrentFolderView();
-		}
-	); 
+	})
+	.done(function(data,status){
+		$.fn.refreshCurrentFolderView();
+	})
+	.fail(function(){
+		console.log("addfolder post failed");
+	}); 
 
 };
 
@@ -1075,11 +1092,13 @@ $.fn.renameFile = function (link_key, name, icon) {
 	$.post("link",{
 			action : action,
 			params : JSON.stringify(params)
-		},
-		function(data,status){
+	})
+	.done(function(data,status){
 			$(icon).find(".div-thumbnail-desc-hook").html(name);
-		}
-	);
+	})
+	.fail(function(){
+		console.log("updatelink post failed");
+	});
 		
 };
 
@@ -1110,12 +1129,14 @@ $.fn.deleteFile = function (icon_key) {
 	$.post("link",{
 			action : action,
 			params : JSON.stringify(params)
-		},
-		function(data,status){
-			//if success remove the deleted icon from the UI
-			$("#" + icon_key).remove();
-		}
-	);
+	})
+	.done(function(data,status){
+		//if success remove the deleted icon from the UI
+		$("#" + icon_key).remove();
+	})
+	.fail(function(){
+		console.log("addfolder post failed");
+	});
 	
 };
 
@@ -1715,7 +1736,12 @@ $(document).on("click", ".div-app-window-new-window-button", function() {
 
 
 
+/************************************ ONCE THE PAGE IS LOADED, SHOW THE MYDRIVE FOLDER*************************************/
 
+
+$.fn.displayFolderContents( $(".div-sysfolder-mydrive-hook").attr("id") );
+
+/*************************************** END - SHOW MY DRIVE FOLDER**************************************************/
 
 
 

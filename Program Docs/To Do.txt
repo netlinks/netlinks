@@ -94,10 +94,17 @@ Time bound development starts! This is serious!
 
 [Done] remove register page - just save email id in the user database.
 
+[Done] - show my drive while logging in
+
+[Done] - rewrite ajax calls - do things only on success
+- Always return success or failure from backend for ajax posts
 - confirm before delete
+- tooltip - use html property 'title'
+- wrap texts in <p>
 
 
-- [critical] Mathrubhumi epaper does not open inside the iframe. It opens in main window
+
+- Mathrubhumi epaper does not open inside the iframe. It opens in main window - investigate it
 
 
 

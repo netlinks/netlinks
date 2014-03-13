@@ -1,0 +1,19 @@
+Apps that are standalone and they dont need any input file - eg - calculator
+Apps that cant work stand alone, it always need input file - image viewer. In windows you cannot run image viewer stand alone
+APPS that cab standalone and need input file - eg notepad
+=========================
+
+In net links we can imagine differnt kinds of apps.
+
+- APPs that run locally hosted code. These apps are simple, light weight. These APPS are system apps, which comes by default - image viewer, video player, calculator, etc..
+	- APPS that doesnt take any inputs. These apps are simple, standalone one. Doesnt do much. Eg, Calculator, minesweeper
+	- APPS that take inputs, but does not write. Eg, image viewer, Youtube player, etc.
+	- APPS that take inputs and saves it. eg, simple text editor.
+
+- APPS hosted in external servers,
+	- APPS that doesnt take any input from netlinks - most of the web apps falls in to this category - eg-Wikipedia, Facebook, youtube
+	- APPS that take input file, but doesnt write any files - eg - External PDF viewer, Word viewer.
+	- APPS that take input file and saves it back. Eg, advanced image editor, text editor - eg pixlr, lucid chart.
+
+
+**Need to make general rules for the above.
