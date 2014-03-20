@@ -123,24 +123,29 @@ def updateFolder(params):
 
 def deleteFolder(params):
     logging.info('deleteFolder(): Start')
-    
-    #find subfolders
-    subfolders = Folder.query(Folder.parent_folder==params["folder_key"]).fetch()
-    
-    #delete all sub folders
-    for folder in subfolders:
-        folder.key.delete()
-        
-    # Decrement n_items of the parent folder and save
+     # Decrement n_items of the parent folder and save
     params['folder_key'].get().parent_folder.get().n_items -= 1
     params['folder_key'].get().parent_folder.get().put()
-      
-    params['folder_key'].delete()
-    
+    deleteAllSubFolder(params['folder_key'].get())    
+   
     status = 'Success: from deleteFolder'
     
     return status
 
+def deleteAllSubFolder(folder):
+    logging.info("deleting all subfolder() : start")
+    
+    subfolders = Folder.query(Folder.parent_folder==folder.key).fetch();
+    logging.info(folder.name)
+
+    #delete all sub folders
+    for subfolder in subfolders:
+        deleteAllSubFolder(subfolder)
+    
+    logging.info("deleting : " + folder.name)
+    folder.key.delete()
+    
+    return 'Success'
 #ToDo - delete sub directories and its contents. find all the links and folders with this key and delete all of them as well
 
 ##################################################################################################################
