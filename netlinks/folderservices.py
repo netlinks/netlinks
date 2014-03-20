@@ -143,6 +143,9 @@ def deleteAllSubFolder(folder):
         deleteAllSubFolder(subfolder)
     
     logging.info("deleting : " + folder.name)
+    subLinks = Link.query(Link.parent_folder==folder.key).fetch();
+    for subLink in subLinks:
+        subLink.key.delete()
     folder.key.delete()
     
     return 'Success'
