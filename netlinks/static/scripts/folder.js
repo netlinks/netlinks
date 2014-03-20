@@ -588,10 +588,21 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 				// if action is delete
 				else if ( action == "delete" )
 				{
-					$.fn.deleteFolder(icon_key);
 					
-					//remove the deleted icon from the UI
-					$("#" + icon_key).remove();
+					var r = confirm("Are you sure you want to delete?");
+					
+					if ( r == true )
+					{
+					  	$.fn.deleteFolder(icon_key);
+						
+						//remove the deleted icon from the UI
+						$("#" + icon_key).remove();
+					}
+					else
+					{
+					  	return;
+					}
+					
 					
 				}
 				
@@ -708,8 +719,17 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 				// if action is delete
 				else if ( action == "delete" )
 				{
-					//delete file
-					$.fn.deleteFile(icon_key);
+					var r = confirm("Are you sure you want to delete?");
+					
+					if ( r == true )
+					{
+					  	//delete file
+						$.fn.deleteFile(icon_key);					
+					}
+					else
+					{
+					  	return;
+					}
 							
 				}
 				
@@ -991,7 +1011,7 @@ $.fn.openFile = function (url) {
 		txt = "<iframe class='iframe-app-content' id='iframe-app-content-1' src='"+ app_url +"'></iframe>";
 		
 		//open widow with the content from the server
-		$.fn.openWindow(txt);
+		$.fn.openWindow(txt, app_url);
 		
 	})
 	.fail(function(){
@@ -1516,13 +1536,14 @@ function Appwindow()
 
 /***********************************  FUNCTION OPEN WINDOWN ************************************************/
 
-$.fn.openWindow = function (content) {
+$.fn.openWindow = function (content, url) {
 	
 	
 	//create an object for this window
 	
 	g_appwindow[1] = new Appwindow();
 	g_appwindow[1].window_state = "NORMAL";
+	g_appwindow[1].app_url = url;
 	
 	
 	//write iframe to the window contents
@@ -1679,7 +1700,9 @@ $.fn.maximizeWindow = function () {
 $.fn.openAppInNewWindow = function () {
 	
 	//open new tab with app url
+	console.log(g_appwindow[1].app_url);
 	window.open(g_appwindow[1].app_url);
+	
 	
 	//alert( $("iframe-app-content-1").contents().get(0).location.href );      //not working because of security, will work only if iframe belong to same website
 	
