@@ -780,8 +780,11 @@ $.fn.addFolder = function (folder_id) {
 	})
 	.done(function(data,status){
 		
-		//if success remove the deleted icon from the UI
-		$.fn.refreshCurrentFolderView();
+		setTimeout(function(){
+			$.fn.refreshCurrentFolderView();
+			}, 300
+		);
+		
 	})
 	.fail(function(){
 		console.log("addfolder post failed");
@@ -842,7 +845,12 @@ $.fn.copyFolder = function (object_key, target_folder_key) {
 		params : JSON.stringify(params)
 	})
 	.done(function(data,status){
-		$.fn.refreshCurrentFolderView();
+		
+		setTimeout(function(){
+			$.fn.refreshCurrentFolderView();
+			}, 300
+		);
+		
 	})
 	.fail(function(){
 		console.log("copyfolder post failed");
@@ -876,7 +884,12 @@ $.fn.moveFolder = function (object_key, target_folder_key) {
 		params : JSON.stringify(params)
 	})
 	.done(function(data,status){
-		$.fn.refreshCurrentFolderView();
+		
+		setTimeout(function(){
+			$.fn.refreshCurrentFolderView();
+			}, 300
+		);
+		
 	})
 	.fail(function(){
 		console.log("movefolder post failed");
@@ -975,9 +988,15 @@ $.fn.addFile = function (name, url, parent_folder) {
 			action : action,
 			params : JSON.stringify(params)
 	})
-	.done(function(data,status){			
+	.done(function(data,status){
+		
+		setTimeout(function(){
+			$.fn.refreshCurrentFolderView();
+			}, 300
+		);
+					
 		$.fn.closeWindow();
-		$.fn.refreshCurrentFolderView();
+		
 	})
 	.fail(function(){
 		console.log("addlink post failed");
@@ -1043,7 +1062,12 @@ $.fn.copyFile = function (object_key, target_folder_key) {
 			params : JSON.stringify(params)
 	})
 	.done(function(data,status){
+		
+		setTimeout(function(){
 			$.fn.refreshCurrentFolderView();
+			}, 300
+		);
+		
 	})
 	.fail(function(){
 		console.log("copylink post failed");
@@ -1081,7 +1105,12 @@ $.fn.moveFile = function (object_key, target_folder_key) {
 			params : JSON.stringify(params)
 	})
 	.done(function(data,status){
-		$.fn.refreshCurrentFolderView();
+
+		setTimeout(function(){
+			$.fn.refreshCurrentFolderView();
+			}, 300
+		);
+
 	})
 	.fail(function(){
 		console.log("addfolder post failed");

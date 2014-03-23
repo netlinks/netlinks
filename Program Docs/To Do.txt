@@ -97,8 +97,9 @@ Time bound development starts! This is serious!
 [Done] - show my drive while logging in
 
 [Done] - rewrite ajax calls - do things only on success
-- Always return success or failure from backend for ajax posts
-- confirm before delete
+[Done] - confirm before delete
+
+- move core common python functions to another file
 - tooltip - use html property 'title'
 - wrap texts in <p>
 

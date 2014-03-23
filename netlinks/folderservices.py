@@ -15,6 +15,9 @@ def genFolderParentKey():        #Function to create key for user class
     user_id = users.get_current_user().user_id()
     return ndb.Key(Folder, user_id)
 
+def genLinkParentKey():        #Function to create key for Link class
+    user_id = users.get_current_user().user_id()
+    return ndb.Key(Link, user_id)
 
 # seperate function for adding root folder is created to make logic simple. Otherwise there will be complications to take care when parent is null and path is /
 def addRootFolder():
@@ -123,33 +126,45 @@ def updateFolder(params):
 
 def deleteFolder(params):
     logging.info('deleteFolder(): Start')
-     # Decrement n_items of the parent folder and save
-    params['folder_key'].get().parent_folder.get().n_items -= 1
-    params['folder_key'].get().parent_folder.get().put()
-    deleteAllSubFolder(params['folder_key'].get())    
+    
+    #capture parent folder. This is to decrement n_items. It is better to decrement it after delete operation
+    parent = params['folder_key'].get().parent_folder.get()
+    
+    
+    #delete subfolders
+    deleteAllSubFolders(params['folder_key'].get())    
+   
+    # Decrement n_items of the parent folder and save. 
+    parent.n_items -= 1
+    parent.put()
    
     status = 'Success: from deleteFolder'
     
     return status
 
-def deleteAllSubFolder(folder):
-    logging.info("deleting all subfolder() : start")
-    
-    subfolders = Folder.query(Folder.parent_folder==folder.key).fetch();
+def deleteAllSubFolders(folder):
+    logging.info("deleteAllSubFolder() : start")
+        
     logging.info(folder.name)
-
+    
+    #get subfolders
+    subfolders = Folder.query(Folder.parent_folder==folder.key).fetch();
+    
     #delete all sub folders
     for subfolder in subfolders:
-        deleteAllSubFolder(subfolder)
+        deleteAllSubFolders(subfolder)
     
-    logging.info("deleting : " + folder.name)
+    #find and delete the links in this folder
     subLinks = Link.query(Link.parent_folder==folder.key).fetch();
     for subLink in subLinks:
+        logging.info("deleting Link: " + subLink.name)
         subLink.key.delete()
+        
+    logging.info("deleting Folder: " + folder.name)
     folder.key.delete()
     
     return 'Success'
-#ToDo - delete sub directories and its contents. find all the links and folders with this key and delete all of them as well
+
 
 ##################################################################################################################
 
@@ -187,7 +202,10 @@ def moveFolder(params):
     
     status = 'Success: from movefolder'
     
-    return status    
+    return status
+
+
+        
 
 ##################################################################################################################
 
@@ -200,37 +218,70 @@ def copyFolder(params):
     
     #Get current folder from GUI
     folder = params['folder_key'].get()
+    target_folder = params['target_folder_key'].get()
     
-    #Create new folder element to copy the folder
-    new_folder = Folder(parent=genFolderParentKey())
-    
-    
-    #Copy properties of the folder to new folder  
-    new_folder.name = folder.name
-    new_folder.parent_folder = params['target_folder_key']    #parent should be the one provided by the user
-    new_folder.date_c = folder.date_c
-    new_folder.date_m = folder.date_m
-    new_folder.n_items = folder.n_items
-    new_folder.icon = folder.icon
-    new_folder.color = folder.icon
-    new_folder.view = folder.view
-    new_folder.path = params['target_folder_key'].get().path + new_folder.name + '/'   #path is calcuated from the give target folder's path
-    
-    
-    #save new folder
-    new_folder.put()
-    
+    copyAllSubFolders(folder, target_folder)
+        
     #increment n_items of new parent folder and save it
-    params['target_folder_key'].get().n_items += 1
-    params['target_folder_key'].get().put()
+    target_folder.n_items += 1
+    target_folder.put()
     #logging.info('copyLink: '+ str(params['target_folder_key'].get().n_items))
-    
     
     status = 'Success: from copyfolder'
     
     return status    
     
 #TODO Copy the subfolders and files
+
+def copyAllSubFolders(folder, target_folder):
+    #TODO Need to copy subfolders tree contents
+    
+    logging.info('copyAllSubFolder(): Start')
+    
+    #Create new folder element to copy the folder
+    new_folder = Folder(parent=genFolderParentKey())
+    
+    #Copy the folder to new folder 
+    logging.info('copyAllSubFolders: copying folder |'+folder.name+'| to: |'+target_folder.name) 
+    new_folder.populate(**folder.to_dict())     #to_dict returns the dictionary of 'folder' and '.populate()' will save the value pairs to new folder
+    
+    #change necessary parameters
+    new_folder.parent_folder = target_folder.key    #parent of new folder should be the target folder
+    new_folder.date_c = datetime.datetime.now()
+    new_folder.date_m = datetime.datetime.now()
+    new_folder.path = target_folder.path + new_folder.name + '/'   #path is calcuated from the give target folder's path
+    
+    #save new folder
+    new_folder.put()
+    
+     
+    
+    #find and copy files in this folder
+    subLinks = Link.query(Link.parent_folder==folder.key).fetch();
+    for subLink in subLinks:
+        logging.info("deleting Link: " + subLink.name)
+        
+        #Create new link
+        new_link = Link(parent=genLinkParentKey())
+        
+        #Copy the links to new folder 
+        logging.info('copyAllSubFolders: copying file |'+subLink.name+'| to: |'+target_folder.name) 
+        new_link.populate(**subLink.to_dict())     #to_dict returns the dictionary of 'subLink' and '.populate()' will save the value pairs to new link
+        
+        new_link.parent_folder = new_folder.key    #parent of new folder should be the one provided by the user
+        new_link.date_c = datetime.datetime.now()
+        new_link.date_m = datetime.datetime.now()
+        new_link.path = new_folder.path
+        
+        #save new link
+        new_link.put()
+    
+    #find and copy the subfolders in this folder
+    subfolders = Folder.query(Folder.parent_folder==folder.key).fetch();
+    for subfolder in subfolders:
+        copyAllSubFolders(subfolder, new_folder)
+        
+    return "success"    
 
 #################################################################################################################
 
