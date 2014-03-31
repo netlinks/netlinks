@@ -7,17 +7,9 @@ import json
 import datetime
 
 from models import Folder, Link
-
+from coreservices import genFolderParentKey, genLinkParentKey
 
 ###########################   Folder Services   ###############################
-
-def genFolderParentKey():        #Function to create key for user class
-    user_id = users.get_current_user().user_id()
-    return ndb.Key(Folder, user_id)
-
-def genLinkParentKey():        #Function to create key for Link class
-    user_id = users.get_current_user().user_id()
-    return ndb.Key(Link, user_id)
 
 # seperate function for adding root folder is created to make logic simple. Otherwise there will be complications to take care when parent is null and path is /
 def addRootFolder():

@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "name": "Netlinks",
+  "name": "Save Link",
   "description": "Netlinks plugin for adding your favorite links to Netlinks application",
   "version": "1.0",
 
@@ -10,7 +10,7 @@
     "default_popup": "popup.html"
   },
   "permissions": [
-    "tabs","contextMenus",
+    "tabs","contextMenus","bookmarks",
     "https://*/*","http://*/*"
   ],
   "content_scripts": [

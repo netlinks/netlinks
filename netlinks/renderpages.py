@@ -3,8 +3,9 @@ from google.appengine.api import users
 
 import jinja2
 import os
+import logging
 
-from userservices import *
+from coreservices import getCurrentUser
 
 
 jinja_environment = jinja2.Environment(

@@ -1,19 +1,13 @@
 from google.appengine.ext import ndb
-from google.appengine.api import users
 
 import logging
 import json
 import datetime
 
 from models import Link
-from userservices import getCurrentUser
+from coreservices import genLinkParentKey, getCurrentUser
 
 
-
-
-def genLinkParentKey():        #Function to create key for Link class
-    user_id = users.get_current_user().user_id()
-    return ndb.Key(Link, user_id)
 
 
 def addLink(params):
@@ -31,6 +25,7 @@ def addLink(params):
         link.ur = None
         
     if 'parent' in params:
+        params['parent'] = ndb.Key(urlsafe=params['parent']) #Convert  parent key to datastore format
         if params['parent'].get():                          #check if provded parent folder exists in database
             link.parent_folder = params['parent']
         else:
@@ -65,10 +60,9 @@ def addLink(params):
     #save the link object
     link.put()
     
-    #increment parent folder's items count and save. Do this only if parent is present in the parameters and it is in the system
-    if params['parent'] is not None and params['parent'].get():
-        params['parent'].get().n_items += 1 
-        params['parent'].get().put()
+    #increment parent folder's items count and save. 
+    link.parent_folder.get().n_items += 1 
+    link.parent_folder.get().put()
     
     status = 'Success: from addLink'
     return status
@@ -175,7 +169,6 @@ def linkServices(page):
     
     if action == 'addlink':
         logging.info('linkServices: calling addLink')
-        params['parent'] = ndb.Key(urlsafe=params['parent'])
         status = addLink(params)
         page.response.out.write(status)
         

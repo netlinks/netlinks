@@ -89,7 +89,7 @@ Time bound development starts! This is serious!
 		:upload[optional]
 		:properties [optional]
 
-[2/26] - Extension - Add Button
+[Done] [2/26] - Extension - Add Button
 
 
 [Done] remove register page - just save email id in the user database.
@@ -99,9 +99,12 @@ Time bound development starts! This is serious!
 [Done] - rewrite ajax calls - do things only on success
 [Done] - confirm before delete
 
-- move core common python functions to another file
-- tooltip - use html property 'title'
-- wrap texts in <p>
+
+[Done]- extn, if not logged in, show login page
+
+
+
+
 
 
 
