@@ -102,7 +102,7 @@ Time bound development starts! This is serious!
 
 [Done]- extn, if not logged in, show login page
 
-
+- import bookmarks using extension
 
 
 

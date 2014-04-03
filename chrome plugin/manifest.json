@@ -6,18 +6,11 @@
   "version": "1.0",
 
   "browser_action": {
-    "default_icon": "icon.jpg",
+    "default_icon": "icon.ico",
     "default_popup": "popup.html"
   },
   "permissions": [
     "tabs","contextMenus","bookmarks",
     "https://*/*","http://*/*"
-  ],
-  "content_scripts": [
-  {
-    "matches": ["http://*/*","https://*/*"],
-    "js": ["jquery.js"],
-    "run_at": "document_start",
-    "all_frames": true
-  }]
+  ]
 }

@@ -1,7 +1,7 @@
 
 import webapp2
 import logging
-
+import json		#temperory, needs to remove after testing
 
 #import only required functions. Do not use wild import (*)
 from renderpages import renderWelcomePage, renderFolderPage, renderTestFolderPage
@@ -9,6 +9,7 @@ from coreservices import isUserSignedUp, isUserSignedIn
 from userservices import addUser     
 from folderservices import folderServices   
 from linkservices import linkServices
+from importservices import importServices
 
 ############################################ USER ACTION HANDLERS #####################################################
 
@@ -66,7 +67,7 @@ class Link(webapp2.RequestHandler):
 		
 		if not isUserSignedIn(): 						#If user is not signed in dont do anything
 			logging.info(' Link.post(): User is not signed in, exiting')
-			self.response.out.write(False)
+			self.response.out.write("LOGIN FAILED")
 			return		
 		
 		logging.info('Link.post(): calling linkServices module')		
@@ -90,6 +91,23 @@ class App(webapp2.RequestHandler):
 
 ############################################ END of Application handling #####################################################
 
+
+
+############################################ Application handling #####################################################
+
+class Import(webapp2.RequestHandler):
+		
+	def post(self):
+		
+		if not isUserSignedIn(): 						#If user is not signed in dont do anything
+			logging.info(' App.get(): User is not signed in, exiting')
+			return		
+		
+		importServices(self)
+		
+		self.response.out.write('brewing the bookmark tree')
+
+############################################ END of Application handling #####################################################
 
 
 
@@ -119,6 +137,7 @@ app = webapp2.WSGIApplication([
 	('/folder', Folder),
 	('/link', Link),
 	('/app', App),
+	('/import', Import),
 	('/test', Test),
 	], debug=True)
 

@@ -10,7 +10,7 @@ from google.appengine.ext import ndb
 class Link(ndb.Model):
     name = ndb.StringProperty()  # file name - by default, url, but user may edit it
     description = ndb.StringProperty()  # Description about the link
-    url = ndb.StringProperty() # To store the complete URL
+    url = ndb.TextProperty() # To store the complete URL. Max length of 'String' is 500. So using TextProperty
     website = ndb.StringProperty() # To store only the website address. Eg. www.youtube.com
     file_type = ndb.StringProperty()    # To sore the content type. Eg, video, article, application. These are called system folders
     parent_folder = ndb.KeyProperty(kind='Folder')  #Reference to parent folder

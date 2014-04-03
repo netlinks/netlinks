@@ -1014,8 +1014,10 @@ $.fn.addFile = function (name, url, parent_folder) {
 
 $.fn.openFile = function (url) {
 	
+	window.open(url);
 	
-	$.post("app",{
+	
+	/*$.post("app",{
 			appid : "linkviewer",
 			params : url
 	})
@@ -1035,7 +1037,8 @@ $.fn.openFile = function (url) {
 	})
 	.fail(function(){
 		console.log("linkviewer post failed");
-	}); 	
+	});*/
+	 	
 };
 
 

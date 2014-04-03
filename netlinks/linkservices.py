@@ -22,10 +22,9 @@ def addLink(params):
     if 'url' in params:
         link.url = params['url']
     else:
-        link.ur = None
+        link.url = None
         
     if 'parent' in params:
-        params['parent'] = ndb.Key(urlsafe=params['parent']) #Convert  parent key to datastore format
         if params['parent'].get():                          #check if provded parent folder exists in database
             link.parent_folder = params['parent']
         else:
@@ -64,7 +63,7 @@ def addLink(params):
     link.parent_folder.get().n_items += 1 
     link.parent_folder.get().put()
     
-    status = 'Success: from addLink'
+    status = 'SUCCESS'
     return status
 
 def updateLink(params):
@@ -169,6 +168,8 @@ def linkServices(page):
     
     if action == 'addlink':
         logging.info('linkServices: calling addLink')
+        if 'parent' in params:
+            params['parent'] = ndb.Key(urlsafe=params['parent']) #Convert  parent key to datastore format
         status = addLink(params)
         page.response.out.write(status)
         

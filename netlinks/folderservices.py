@@ -251,7 +251,7 @@ def copyAllSubFolders(folder, target_folder):
     #find and copy files in this folder
     subLinks = Link.query(Link.parent_folder==folder.key).fetch();
     for subLink in subLinks:
-        logging.info("deleting Link: " + subLink.name)
+        logging.info("Copying Link: " + subLink.name)
         
         #Create new link
         new_link = Link(parent=genLinkParentKey())
