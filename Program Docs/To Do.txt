@@ -100,9 +100,9 @@ Time bound development starts! This is serious!
 [Done] - confirm before delete
 
 
-[Done]- extn, if not logged in, show login page
+[Done] - extn, if not logged in, show login page
 
-- import bookmarks using extension
+[Done] - import bookmarks using extension
 
 
 

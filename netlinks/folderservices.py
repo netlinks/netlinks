@@ -7,7 +7,7 @@ import json
 import datetime
 
 from models import Folder, Link
-from coreservices import genFolderParentKey, genLinkParentKey
+from coreservices import genFolderParentKey, genLinkParentKey, getCurrentUser
 
 ###########################   Folder Services   ###############################
 
@@ -45,7 +45,7 @@ def addFolder(params):
     if 'icon' in params:
         folder.icon = params['icon']
     else:
-        folder.icon = 'Default'
+        folder.icon = '/images/folder-icon.png'
     
     if 'color' in params:
         folder.color = params['color']
@@ -76,8 +76,10 @@ def addFolder(params):
         ###### Add folder always have to have a parent. Otherwise it will not be added
         return
         
-    return folder.put()     #save the folder details and return the key
+      
+    new_folder_key = folder.put()     #save the folder and capture the key
     
+    return new_folder_key.urlsafe()    # return the folder key
         
      
     
@@ -300,19 +302,17 @@ def getFolderContents(params):
     for link in links:
         link_temp = linkclass()
         
-        
-        link_temp.name = link.name
-        link_temp.description = link.description
-        link_temp.url = link.url
-        link_temp.website = link.website
-        link_temp.key = link.key.urlsafe()
-        link_temp.file_type = link.file_type
         link_temp.date_c = link.date_c.isoformat()
         link_temp.date_m = link.date_m.isoformat()
+        link_temp.description = link.description
+        link_temp.file_type = link.file_type
+        link_temp.key = link.key.urlsafe()
+        link_temp.name = link.name
         link_temp.path = link.path
+        link_temp.url = link.url
+        link_temp.website = link.website
         
         folder_contents_dict['link'].append(link_temp.__dict__)
-    
     
     
     #get subfolders in this folder
@@ -324,16 +324,12 @@ def getFolderContents(params):
         folder_temp = folderclass()    #create instance of folderclass to temporarily store folder details before writing to dictionary.
         
         #assign folder details of datastore to temporary folder class
-        folder_temp.key = folder.key.urlsafe()
-        folder_temp.name = folder.name
+        
         folder_temp.date_c = folder.date_c.isoformat()   #isoformat() is to convert the python date format to json serializable format
-        folder_temp.date_m = folder.date_m.isoformat()   #isoformat() is to convert the python date format to json serializable format
-        folder_temp.n_items = folder.n_items
-        folder_temp.path = folder.path
+        folder_temp.date_m = folder.date_m.isoformat()
         folder_temp.icon = folder.icon
-        folder_temp.color = folder.color
-        folder_temp.view = folder.view
-        folder_temp.parent_folder = folder.parent_folder.urlsafe()
+        folder_temp.key = folder.key.urlsafe()
+        folder_temp.name = folder.name        
         
         #append this folder details to the dictionary. ___dict__ will return the dictionary format of the object
         folder_contents_dict['folder'].append(folder_temp.__dict__)        
@@ -344,16 +340,11 @@ def getFolderContents(params):
     
     current_folder_temp = folderclass()  #temporary folder object
     
+    current_folder_temp.date_c = current_folder.date_c.isoformat()   #isoformat() is to convert the python date format to json serializable format
+    current_folder_temp.date_m = current_folder.date_m.isoformat()
+    current_folder_temp.icon = current_folder.icon
     current_folder_temp.key = current_folder.key.urlsafe()
     current_folder_temp.name = current_folder.name
-    current_folder_temp.date_c = current_folder.date_c.isoformat()   #isoformat() is to convert the python date format to json serializable format
-    current_folder_temp.date_m = current_folder.date_m.isoformat()   #isoformat() is to convert the python date format to json serializable format
-    current_folder_temp.n_items = current_folder.n_items
-    current_folder_temp.path = current_folder.path
-    current_folder_temp.icon = current_folder.icon
-    current_folder_temp.color = current_folder.color
-    current_folder_temp.view = current_folder.view
-    current_folder_temp.parent_folder = current_folder.parent_folder.urlsafe()
 
 
     #add current folder details to the dictionary
@@ -379,7 +370,7 @@ def addSystemFolders():
     #set parameters for other system folder. set parent as root key
     mydrive = {
         'name' : 'mydrive',
-        'icon' : 'mydrive_icon',
+        'icon' : '/images/folder-icon.png',
         'color' : 'mydrive_color',
         'view' : 'grid',
         'parent_folder_key' : root_key
@@ -387,7 +378,7 @@ def addSystemFolders():
     
     videos = {
         'name' : 'videos',
-        'icon' : 'videos_icon',
+        'icon' : '/images/folder-icon.png',
         'color' : 'videos_color',
         'view' : 'grid',
         'parent_folder_key' : root_key
@@ -396,7 +387,7 @@ def addSystemFolders():
     
     articles = {
         'name' : 'articles',
-        'icon' : 'articles_icon',
+        'icon' : '/images/folder-icon.png',
         'color' : 'articles_color',
         'view' : 'grid',
         'parent_folder_key' : root_key 
@@ -404,7 +395,7 @@ def addSystemFolders():
     
     images = {
         'name' : 'images',
-        'icon' : 'images_icon',
+        'icon' : '/images/folder-icon.png',
         'color' : 'images_color',
         'view' : 'grid',
         'parent_folder_key' : root_key
@@ -412,7 +403,7 @@ def addSystemFolders():
 
     apps = {
         'name' : 'apps',
-        'icon' : 'apps_icon',
+        'icon' : '/images/folder-icon.png',
         'color' : 'apps_color',
         'view' : 'grid',
         'parent_folder_key' : root_key
@@ -441,14 +432,16 @@ def folderServices(page):
     action = page.request.get('action')                 #Capture the action from front end
     params = json.loads(page.request.get('params'))     #Parse the JSON object from the front end
     
+    usr = getCurrentUser()
+    
     
     if action == 'addfolder':
         logging.info('folderServices: adding folder')
         #convert the key to datastore key object before passing
         params['parent_folder_key'] = ndb.Key(urlsafe=params['parent_folder_key']) 
-        addFolder(params)
+        folder = addFolder(params)
         status = 'success addfolder'
-        page.response.out.write(status)
+        page.response.out.write(folder)
         
         
     elif action == 'updatefolder':
@@ -467,8 +460,16 @@ def folderServices(page):
         
     elif action == 'viewfolder':
         logging.info('folderServices: retrieving folder contents')
-        #convert the key to datastore key object before passing
-        params['folder_key'] = ndb.Key(urlsafe=params['folder_key']) 
+        
+        #If the requested folder is HOME, show root folder contents
+        if params['folder_key'] == 'HOME':
+            logging.info('folderService: Requested HOME folder. Retrieving root folder contents')
+            params['folder_key'] = usr.sysfolder_root
+            
+        else:
+            #convert the key to datastore key object before passing
+            params['folder_key'] = ndb.Key(urlsafe=params['folder_key'])
+             
         folder_contents = getFolderContents(params)
         page.response.out.write(folder_contents)
         

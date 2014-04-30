@@ -3,89 +3,40 @@
 <html>
 <head>
 
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.10.4.custom.css">
-
-
-
-
-<script src="/scripts/folder.js"></script>
-<link rel="stylesheet" type="text/css" href="/css/folder.css">
-
+	<script src="/scripts/jquery-1.10.2.min.js"></script>
+	<script src="/scripts/jquery-ui.min.js"></script>
+	<script src="/scripts/folder.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.10.4.custom.css">
+	<link rel="stylesheet" type="text/css" href="/css/folder.css">
 
 </head>
 
-<body oncontextmenu="return false;">
-	
-	<table class="tb-top-pace-holder">
-		<tr>
-			<td class="td-l1-header">
-				<div class="div-logout-container">
-					<table class="tb-header-contents">
-						<tr>
-							<td class="td-header-logo-container">Logo</td>
-							<td class="td-header-middle-container">
-								<div class="div-prev-folder-button" id="div-prev-folder-button" data-key="none">
-									<img class="img-prev-folder-button" src="/images/back-arrow.png" alt="prev Folder">
-								</div>
-								<div class="div-current-folder-path" id="div-current-folder-path">
-									
-								</div>
-							</td>
-							<td class="td-header-right-container">{{message}}<br><a href={{logout_url}}>Logout</a></td>
-						</tr>
-					</table>
+<body background="/images/Nature-HD-Background-3.jpg"  oncontextmenu="return false;">
+	<div id="div-master-container" class="div-master-container">
+		<div id="div-head-bar" class="div-head-bar">
+			<div id="div-address-bar">
+				<div id="div-home" class="div-home">
+					<img id="img-home-icon" src="/images/home.png">
 				</div>
-			</td>
-		</tr>
-		<tr>
-			<td class="td-window-body-contents" id="td-window-body-contents">
-				<table class="tb-middle-place-holder">
-					<tr>
-						<td class="td-left-panel-container">
-							<div class="div-sysfolders-container">
-								<div class="div-sysfolder div-sysfolder-mydrive-hook" id="{{folder_mydrive.key.urlsafe()}}"><div class ="div-sysfolder-content">Mydrive</div></div>
-								<div class="div-sysfolder" id="{{folder_videos.key.urlsafe()}}"><div class ="div-sysfolder-content">Videos</div></div>
-								<div class="div-sysfolder" id="{{folder_articles.key.urlsafe()}}"><div class ="div-sysfolder-content">Articles</div></div>
-								<div class="div-sysfolder" id="{{folder_images.key.urlsafe()}}"><div class ="div-sysfolder-content">Images</div></div>
-								<div class="div-sysfolder" id="{{folder_apps.key.urlsafe()}}"><div class ="div-sysfolder-content">Apps</div></div>
-							</div>
-						</td>
-						<td class="td-middle-panel-container" id="td-folder-container">
-						</td>
-						<td class="td-right-panel-container" id="td-properties-container"></td>
-					</tr>
-				</table>
-			</td>
-		</tr>
-	</table>
-	
-	
-	
-
-	
-	<!-- div to display the link contents -->
-	<div class="div-app-window" id="div-app-window-1">
-		<div class="div-app-window-title" id="div-app-window-title-1">
-			<div class="div-app-window-control-buttons" id="div-app-window-control-buttons-1">
-				<div class="div-app-window-close-button">X</div>
-				<div class="div-app-window-full-screen-button">O</div>
-				<div class="div-app-window-new-window-button">^</div>
-				
 			</div>
 		</div>
-		<div class="div-app-window-content"  id="div-app-window-content-1">
-			<iframe class="iframe-app-content" src="" id="iframe-app-content-1"> </iframe>
-		</div>		
+		<div id="div-contents" class="div-contents" oncontextmenu="return false;"></div>
 	</div>
 	
 	
-	
-	
-	
-	
-	
+	<ul class="ul-wspace-right-click-menu" id="ul-wspace-right-click-menu">
+	  <li action="addnew">
+	  	<a href="#"><span> </span>Add New</a>
+	  	<ul>
+	  		<li action="addfolder"><a href="#"><span> </span>Folder</a></li>
+	  	</ul>
+	  </li>
+	  <li>-</li>
+	  <li action="refresh"><a href="#"><span> </span>Refresh</a></li>
+	  <li>-</li>
+	  <li class="ui-state-disabled" action="paste"><a href="#"><span> </span>Paste</a></li>
+	</ul>
 	
 	
 	<ul class="ul-icon-right-click-menu" id="ul-icon-right-click-menu">
@@ -98,25 +49,6 @@
 	  <li>-</li>
 	  <li action="delete"><a href="#"><span> </span>Delete</a></li>
 	</ul>
-	
-		
-	<ul class="ul-wspace-right-click-menu" id="ul-wspace-right-click-menu">
-	  <li action="addnew">
-	  	<a href="#"><span> </span>Add New</a>
-	  	<ul>
-	  		<li action="addfile"><a href="#"><span> </span>Link</a></li>
-	  		<li action="addfolder"><a href="#"><span> </span>Folder</a></li>
-	  	</ul>
-	  </li>
-	  <li>-</li>
-	  <li action="refresh"><a href="#"><span> </span>Refresh</a></li>
-	  <li>-</li>
-	  <li class="ui-state-disabled" action="paste"><a href="#"><span> </span>Paste</a></li>
-	</ul>
-	
-	
-	
-		
 	
 </body>
 </html>

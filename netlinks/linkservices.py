@@ -19,6 +19,12 @@ def addLink(params):
     link = Link(parent=genLinkParentKey()) #Create a datastore entity with parent as the key generated above
     
     #add Link details to the object
+    
+    if 'icon' in params:
+        link.icon = params['icon']        
+    else:
+        link.icon = '/images/file-icon-default.png'
+        
     if 'url' in params:
         link.url = params['url']
     else:

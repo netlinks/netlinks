@@ -1,7 +1,6 @@
 
 import webapp2
 import logging
-import json		#temperory, needs to remove after testing
 
 #import only required functions. Do not use wild import (*)
 from renderpages import renderWelcomePage, renderFolderPage, renderTestFolderPage
@@ -36,15 +35,6 @@ class MainPage(webapp2.RequestHandler):
 			renderFolderPage(self)
 		
 		
-############################################# signup action  '/signup' ####################################################
-
-class Signup(webapp2.RequestHandler):
-	
-	def post(self):
-		logging.info('Signup.post(): calling addUser module')		
-		addUser(self)   #call for the function which adds user details
-		
-		self.redirect("/")
 
 ############################################ FOLDER ACTION HANDLERS #####################################################
 
@@ -58,7 +48,7 @@ class Folder(webapp2.RequestHandler):
 		
 		logging.info('Folder.post(): calling folderServices module')		
 		folderServices(self)		
-
+		
 ############################################ LINKS ACTION HANDLERS #####################################################
 
 class Link(webapp2.RequestHandler):
@@ -133,7 +123,6 @@ class Test(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
 	('/', MainPage),
-	('/signup', Signup),
 	('/folder', Folder),
 	('/link', Link),
 	('/app', App),
