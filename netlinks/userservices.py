@@ -35,7 +35,7 @@ def addUser():
     
     logging.info('addUser: storing system folder keys in user object')   
     usr.sysfolder_root = sys_folder_keys['root']
-    usr.sysfolder_mydrive = sys_folder_keys['mydrive']
+    usr.sysfolder_links = sys_folder_keys['links']
     usr.sysfolder_videos = sys_folder_keys['videos']
     usr.sysfolder_articles = sys_folder_keys['articles']
     usr.sysfolder_images = sys_folder_keys['images']

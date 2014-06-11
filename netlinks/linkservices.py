@@ -34,10 +34,10 @@ def addLink(params):
         if params['parent'].get():                          #check if provded parent folder exists in database
             link.parent_folder = params['parent']
         else:
-            logging.info('addLink: parent folder not found. Adding in mydrive')
-            link.parent_folder = usr.sysfolder_mydrive      #if provided parent is not present in database, mydrive as parent folder        
+            logging.info('addLink: parent folder not found. Adding in links folder')
+            link.parent_folder = usr.sysfolder_links      #if provided parent is not present in database, links as parent folder        
     else:
-        link.parent_folder = usr.sysfolder_mydrive              #if there is no parent, make my drive as parent   
+        link.parent_folder = usr.sysfolder_links              #if there is no parent, make my drive as parent   
             
     if 'name' in params:
         link.name = params['name']

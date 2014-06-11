@@ -15,15 +15,17 @@
 $( document ).ready( function() {
 	
 	
-	//******************** Set height of contents area ****************//
-	$( ".div-contents" ).height( $( window ).height() - 65 ); 
+	//******************** Set height of contents area and width of address bar elements container****************//
+	$( "#div-ad-bar-elmts-container" ).width( $( window ).width() - 100 );
 	
 	
 
 
-	/************************************ ONCE THE PAGE IS LOADED, SHOW THE MYDRIVE FOLDER*************************************/
-	$.fn.displayFolderContents( "HOME" );	
+	/************************************ ONCE THE PAGE IS LOADED, SHOW THE ROOT FOLDER*************************************/
+	$.fn.openFolder( "HOME" );	
 	
+	// Store the initial folder id so we can revisit it later
+    history.replaceState( "HOME", null, null );
 	
 
 
@@ -32,39 +34,63 @@ $( document ).ready( function() {
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	
+ 	//******************** Bind event listener to window. This is to enable browser back button functionality ****************//
+	//window.addEventListener('popstate', function(event) {
+	window.onpopstate = function(event) {
+		console.log("Browser Back/Forward triggered");			
+		$.fn.openFolder(event.state);
+    };
 	
 	//******************** On resize window adjust height of contents area ****************//
 	$( window ).resize( function() {
-  		$( ".div-contents-hook" ).height( $( window ).height() - 65 );
+  		$( "#div-ad-bar-elmts-container" ).width( $( window ).width() - 100 );
 	});
 	
 	
 
+	
+	/************************************* ON CLICK ANYWHERE ON THE PAGE **********************************************************/
+	$(document).on( "click", function() {         
+	
+		//hide the right click menus
+		$( "#ul-wspace-right-click-menu" ).fadeOut(100);
+		$( "#ul-icon-right-click-menu" ).fadeOut(100);
+		
+	});  
+	
+	
 
 	/************************************ On Click on home button ************************************************************/
 	
-	$(document).on("click", "#div-home" , function() {
-		$.fn.displayFolderContents( "HOME" );
-		$( "#div-home" ).nextAll().remove();	     
+	$(document).on( "click", "#div-home" , function() {
+		$.fn.openFolder( "HOME" );
+		window.history.pushState( "HOME", null, null ); 		//updating browser history
 	});
 	
 	
-
+	/************************************ On Click on power button ************************************************************/
+	
+	$(document).on( "click", "#div-power-button" , function() {
+		window.close();     
+	});
+	
 
 	/************************************ON  CLICK ON ICONS ************************************************************/	
 	
-	$(document).on("click", ".div-thumbnail-hook" , function() {         
+	$(document).on( "click", ".div-thumbnail-hook" , function() {         
 	
-		var type = $(this).attr("data-type");
+		var type = $(this).attr( "data-type" );
+		var folder_id = $(this).attr( "id" );
 			
-		if(type == "folder")
+		if(type == "folder" )
 		{
-			$.fn.openFolder(this);
+			$.fn.openFolder(folder_id);
+			window.history.pushState(folder_id,null,null);
 		}	
-		else if (type == "link")
+		else if (type == "link" )
 		{
 			//get url of the link and open file
-			var url = $(this).attr("data-url");				
+			var url = $(this).attr( "data-url" );				
 			$.fn.openFile(url);
 		}
 	});  
@@ -73,51 +99,48 @@ $( document ).ready( function() {
 	
 	/************************************ON  CLICK ON ADDRESS BAR ELEMENTS ************************************************************/	
 	
-	$(document).on("click", ".div-ad-bar-folder-hook" , function() {         
+	$(document).on( "click", ".div-ad-bar-folder-hook" , function() {         
 	
-		$.fn.displayFolderContents(this.id);
-		$( this).parent().nextAll().remove();
-		
+		$.fn.openFolder(this.id);
+		window.history.pushState(this.id,null,null);	//updateing browser history
 	});  
 	
 	
 	
-	
-	/************************************* ON CLICK ANYWHERE ON THE PAGE **********************************************************/
-	$(document).on("click", function() {         
-	
-		//hide the right click menus
-		$("#ul-wspace-right-click-menu").fadeOut(100);
-		$("#ul-icon-right-click-menu").fadeOut(100);
-		
-	});  
 	
 	/******************************* ON MOUSE DOWN ON CONTENTS AREA ************************************************************/
 	
-	$(document).on("mousedown", "#div-contents", function(event) {
+	$(document).on( "mousedown", "#div-contents", function(event) {
 		
 	
 		//////////////////////////////////      NOTICE - ANY ACTION OF THIS EVENT SHOULD BE BELOW THIS BLOCK     ////////////////////////////////////
 		//this condition is to avoid this click from capturing by child element (icons). If the event is not from folder container exit the function	
-		if (event.target.id != "div-contents")
+		if (event.target.id != "div-contents" )
 		{
 			return;
 		}
 		
 		//////////////////////////////////      NOTICE - ANY ACTION OF THIS EVENT SHOULD BE BELOW THIS BLOCK     ////////////////////////////////////
 	
+	
+	
+	
+	
+	
+	
+	
 		//hide the icon rightclick menu
-		$("#ul-icon-right-click-menu").fadeOut(100);
+		$( "#ul-icon-right-click-menu" ).fadeOut(100);
 		
 		
 		
-		if (event.which == 3)  
+		if (event.which == 3)  	//if right click
 		{
 			
 			//if clipboard is not null make the 'paste' menu in the right click menu active. otherwise it will be deactivated
-			if(g_clipboard["action"] != "")
+			if(g_clipboard["action"] != "" )
 			{
-				$("#ul-wspace-right-click-menu li[action='paste']").removeClass("ui-state-disabled");		
+				$( "#ul-wspace-right-click-menu li[action='paste']" ).removeClass( "ui-state-disabled" );		
 			}
 					
 			
@@ -135,10 +158,10 @@ $( document ).ready( function() {
 			
 			
 			//set position of right click menu to mouse pointer
-			$("#ul-wspace-right-click-menu").css({left: event.pageX, top: event.pageY});
+			$( "#ul-wspace-right-click-menu" ).css({left: event.pageX, top: event.pageY});
 			
 			//show right click menu
-			$("#ul-wspace-right-click-menu").fadeIn(300);
+			$( "#ul-wspace-right-click-menu" ).fadeIn(300);
 			
 			
 		}	
@@ -149,13 +172,13 @@ $( document ).ready( function() {
 	/************************************ON MOUSE DOWN ON ICONS ************************************************************/	
 
 	
-	$(document).on("mousedown", ".div-thumbnail-hook", function(event) {
+	$(document).on( "mousedown", ".div-thumbnail-hook", function(event) {
 		
 		
 		
 		//hide the right click menus
-		$("#ul-wspace-right-click-menu").fadeOut(100);
-		$("#ul-icon-right-click-menu").fadeOut(100);
+		$( "#ul-wspace-right-click-menu" ).fadeOut(100);
+		$( "#ul-icon-right-click-menu" ).fadeOut(100);
 		
 		//capture the icon where mouse is down
 		var icon = this;	
@@ -166,9 +189,9 @@ $( document ).ready( function() {
 		if (event.which == 3)  
 		{
 			
-			console.log("icon rightclick detected");
+			console.log( "icon rightclick detected" );
 			//hide right click menu
-			$("#ul-wspace-right-click-menu").fadeOut(100);
+			$( "#ul-wspace-right-click-menu" ).fadeOut(100);
 			
 					
 			//make right click menu
@@ -183,10 +206,10 @@ $( document ).ready( function() {
 			});
 			
 			//set position of right click menu to mouse pointer
-			$("#ul-icon-right-click-menu").css({left: event.pageX, top: event.pageY});
+			$( "#ul-icon-right-click-menu" ).css({left: event.pageX, top: event.pageY});
 			
 			//show right click menu
-			$("#ul-icon-right-click-menu").fadeIn(300);
+			$( "#ul-icon-right-click-menu" ).fadeIn(300);
 		}
 		
 	});  
@@ -233,45 +256,10 @@ $( document ).ready( function() {
 
 
 
-/************************************FUNCTION - DISPLAY FOLDER CONTENTS ************************************************************/
-
-$.fn.displayFolderContents = function (key) {
-	
-	//set variables to be posted to server to retrieve the folder contents
-	var action = "viewfolder";
-	var params = {
-		"folder_key" : key,
-	};
-	
-	// Post the action and get contents from the server and display the contents
-	
-	$.post("folder",{
-			action : action,
-			params : JSON.stringify(params)
-	})
-	.done(function(data,status){
-		
-		//conver the jason data in the server response to javascript object
-		folder_contents = JSON.parse(data);
-		
-		g_current_folder_key = folder_contents["current_folder"].key;
-		
-		//draw icons from the server response
-		$.fn.drawIcons(folder_contents);
-		
-	})
-	.fail(function() {
-		console.log("view folder post failed");
-	});
-};
-
-/************************************END FUNCTION - DISPLAY FOLDER CONTENTS************************************************************/
-
-
-
 /************************************ FUNCTION TO DRAW ICONS ON THE PAGE ************************************************************/
 
 $.fn.drawIcons = function (folder_contents) {
+	console.log( "drawIcons()" );
 	
 	var txt = "";		//variable to store the dynamic html
 	var file_icon = "/images/file-icon-default.png";
@@ -280,7 +268,7 @@ $.fn.drawIcons = function (folder_contents) {
 	for (i in folder_contents)
 	{
 		//if element is folder, iterate though the list of folders and construct the inner html
-		if (i=="folder")	
+		if (i=="folder" )	
 		{
 			type = "folder";
 			for (j in folder_contents[i])
@@ -289,7 +277,7 @@ $.fn.drawIcons = function (folder_contents) {
         	}
 	   	}
 		//if element is link, iterate though the list of links and construct the inner html
-	   	else if (i=="link")
+	   	else if (i=="link" )
 	   	{
 	   		type = "link";
 	   		for (j in folder_contents[i])
@@ -300,17 +288,17 @@ $.fn.drawIcons = function (folder_contents) {
 	}
 	
 	//write the dynamically generated html to the folder area
-	$("#div-contents").html(txt);
+	$( "#div-contents" ).html(txt);
 	
 	//make the icons draggable
-	$(".div-thumbnail-hook").draggable({
+	$( ".div-thumbnail-hook" ).draggable({
 				 containment: "#td-folder-container",
 				 zIndex: 100 ,
 				 opacity: .9
 			});
 	
 	//make the icons droppable 		
-	$(".div-thumbnail-hook").droppable({
+	$( ".div-thumbnail-hook" ).droppable({
 				accept: ".div-thumbnail-hook",
 				tolerance: "intersect",
 				hoverClass: "div-thumbnail-droppable",
@@ -333,18 +321,19 @@ $.fn.drawIcons = function (folder_contents) {
 /************************************ FUNCTION TO HANDLE DRAG AND DROP OPERATION ************************************************************/
 
 $.fn.iconDragDropHandler = function (event, ui, target_element) {
+	console.log( "iconDragDropHandler()" );
 	
-	var target_type = $(target_element).attr("data-type");
-	var target_id =  $(target_element).attr("id");
-	var object_type = ui.draggable.attr("data-type");
-	var object_id = ui.draggable.attr("id");
+	var target_type = $(target_element).attr( "data-type" );
+	var target_id =  $(target_element).attr( "id" );
+	var object_type = ui.draggable.attr( "data-type" );
+	var object_id = ui.draggable.attr( "id" );
 	
 	
 	//if dropping over folder
-	if (target_type == "folder")
+	if (target_type == "folder" )
 	{
 		//if dragging icon is a file (ie link)
-		if (object_type == "link")
+		if (object_type == "link" )
 		{
 			//move the file to the target folder
 			$.fn.moveFile(object_id, target_id);
@@ -352,26 +341,26 @@ $.fn.iconDragDropHandler = function (event, ui, target_element) {
 		}
 		
 		//if dragging icon is a folder
-		else if (object_type == "folder")
+		else if (object_type == "folder" )
 		{
 			//move the file to the target folder
 			$.fn.moveFolder(object_id, target_id);
 		}
 		
 		//clear the dragged element from the GUI
-		$("#" + object_id).remove();
+		$( "#" + object_id).remove();
 		
 	}
 	
 	//if dropping over a file
-	else if (target_type == "link")
+	else if (target_type == "link" )
 	{
-		//alert("not allowed");		//cannot move icons in to a file
+		//alert( "not allowed" );		//cannot move icons in to a file
 	}
 	
 	else
 	{
-		alert("Error: undefined");
+		alert( "Error: undefined" );
 	} 
 	
 };
@@ -389,16 +378,16 @@ $.fn.iconDragDropHandler = function (event, ui, target_element) {
 /************************************ FUNCTION RIGHT CLICK MENU HANDLER ***********************************************************/
 
 $.fn.iconRightClickHandler = function (icon, ui) {
-	
-	$("#ul-icon-right-click-menu").fadeOut(100);		//here because, the menu needs to be hidden while showing confirmation dialogue
+	console.log( "iconRightClickHander" );
+	$( "#ul-icon-right-click-menu" ).fadeOut(100);		//here because, the menu needs to be hidden while showing confirmation dialogue
 					
 	
 	//get action from selected menu item
-	var action = $(ui.item).attr("action");
+	var action = $(ui.item).attr( "action" );
 	
 	//find out the icon type (forlder or link) and its key
-	var icon_type = $(icon).attr("data-type");
-	var icon_key = $(icon).attr("id"); 
+	var icon_type = $(icon).attr( "data-type" );
+	var icon_key = $(icon).attr( "id" ); 
 	
 	
 	if ( icon_type == "folder" )
@@ -408,7 +397,8 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 				if ( action == "open" )
 				{
 					//open folder
-					$.fn.openFolder(icon);
+					$.fn.openFolder(icon_key);
+					window.history.pushState(icon_key,null,null);  
 					
 				}
 				
@@ -426,7 +416,7 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 				// if action is cut
 				else if ( action == "cut" )
 				{
-					console.log("cutting");
+					console.log( "cutting" );
 					
 					//save icon details to clipboard
 					g_clipboard["action"] = "CUT";
@@ -446,11 +436,11 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 				else if ( action == "delete" )
 				{	
 					
-					var r = confirm("Are you sure you want to delete?");
+					var r = confirm( "Are you sure you want to delete?" );
 					
 					if ( r == true )
 					{
-						$("#" + icon_key).remove();
+						$( "#" + icon_key).remove();
 					  	$.fn.deleteFolder(icon_key);
 					}
 					else
@@ -461,7 +451,7 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 
 				else 
 				{
-					console.log("Invalid action");
+					console.log( "Invalid action" );
 				}
 	}
 	
@@ -475,7 +465,7 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 				if ( action == "open" )
 				{
 					//get url of the clicked file
-					var url = $(icon).attr("data-url");
+					var url = $(icon).attr( "data-url" );
 					
 					//open the file
 					$.fn.openFile(url);
@@ -485,7 +475,7 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 				// if action is copy
 				else if ( action == "copy" )
 				{	
-					console.log("copying file");
+					console.log( "copying file" );
 					//save icon details to clipboard			
 					g_clipboard["action"] = "COPY";
 					g_clipboard["object_type"] = "FILE";
@@ -496,7 +486,7 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 				// if action is cut
 				else if ( action == "cut" )
 				{
-					console.log("cutting file");
+					console.log( "cutting file" );
 					//save icon details to clipboard
 					g_clipboard["action"] = "CUT";
 					g_clipboard["object_type"] = "FILE";
@@ -514,14 +504,14 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 				// if action is delete
 				else if ( action == "delete" )
 				{
-					$("#ul-icon-right-click-menu").fadeOut(100);		//here because, the menu needs to be hidden while showing confirmation dialogue
+					$( "#ul-icon-right-click-menu" ).fadeOut(100);		//here because, the menu needs to be hidden while showing confirmation dialogue
 					
-					var r = confirm("Are you sure you want to delete?");
+					var r = confirm( "Are you sure you want to delete?" );
 					
 					if ( r == true )
 					{
 					  	//delete file
-					  	$("#" + icon_key).remove();
+					  	$( "#" + icon_key).remove();
 						$.fn.deleteFile(icon_key);					
 					}
 					else
@@ -532,12 +522,12 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 
 				else 
 				{
-					console.log("coming soon");
+					console.log( "coming soon" );
 				}
 	}
 
 	//hide icon right click menu
-	$("#ul-icon-right-click-menu").fadeOut(100);
+	$( "#ul-icon-right-click-menu" ).fadeOut(100);
 	
 };
 
@@ -559,18 +549,19 @@ $.fn.iconRightClickHandler = function (icon, ui) {
 
 
 $.fn.wspaceRightClickHandler = function (ui){
+	console.log( "wspaceRightClickHandler" );
 	
 	//get action from selected menu item
-	var action = $(ui.item).attr("action");
+	var action = $(ui.item).attr( "action" );
 	var clipboard_action = g_clipboard["action"];
 	var object_type = g_clipboard["object_type"];
-	var object_key = $(g_clipboard["object"]).attr("id");
+	var object_key = $(g_clipboard["object"]).attr( "id" );
 	var target_folder = g_current_folder_key;
 	
 
 	 ///////////////////////////////////////////// P A S T E /////////////////////////////////////////////////////
 
-	if (action == "paste")
+	if (action == "paste" )
 	{
 				//if clipboard action was copy, copy the clipboard item to current folder
 				if ( clipboard_action == "COPY" )
@@ -590,7 +581,7 @@ $.fn.wspaceRightClickHandler = function (ui){
 								}
 								else
 								{
-									console.log("invalid type in clipboard");
+									console.log( "invalid type in clipboard" );
 								}	
 			
 				}
@@ -614,14 +605,14 @@ $.fn.wspaceRightClickHandler = function (ui){
 								
 								else
 								{
-									console.log("invalid type in clipboard");
+									console.log( "invalid type in clipboard" );
 								}
 					
 				}
 								
 				else
 				{
-								console.log("invalid clipboard action");
+								console.log( "invalid clipboard action" );
 				}
 				
 				
@@ -658,7 +649,7 @@ $.fn.wspaceRightClickHandler = function (ui){
 	
 	else
 	{
-		console.log("invalid white space right click menu option");
+		console.log( "invalid white space right click menu option" );
 	}
 	
 };
@@ -685,7 +676,8 @@ $.fn.wspaceRightClickHandler = function (ui){
 
 
 $.fn.refreshCurrentFolderView = function(){
-	$.fn.displayFolderContents(g_current_folder_key);
+	console.log( "refreshCurrentFolderView()" );
+	$.fn.openFolder(g_current_folder_key);
 };
 
 	
@@ -694,8 +686,8 @@ $.fn.refreshCurrentFolderView = function(){
 	
 /**************************** FUNCTION - REFRESH CURRENT FOLDER******************************************************/
 $.fn.drawIcon = function (icon) {
-	
-	$("#div-contents").append(icon);
+	console.log( "drawIcon()" );
+	$( "#div-contents" ).append(icon);
 	
 	//make the icon draggable
 	
@@ -726,6 +718,24 @@ $.fn.drawIcon = function (icon) {
 
 
 
+/**************************** FUNCTION - UPDATE ADDRESS BAR ******************************************************/
+$.fn.updateAddressBar = function (folder_path) {
+	console.log( "updateAddressBar()" );
+	
+	$( "#div-ad-bar-elmts-container" ).empty();	
+	
+	var folder_id;
+	var folder_name;
+	
+	for ( i in folder_path ) {
+		folder_id = folder_path[i].key;
+		folder_name = folder_path[i].name;
+		
+		$( "#div-ad-bar-elmts-container" ).prepend( "<div class='div-ad-bar-element'><div class='div-ad-bar-seperator'><span class='span-ad-bar-seperator'>►</span></div><div id='" + folder_id + "' class='div-ad-bar-folder div-ad-bar-folder-hook' title='" + folder_name + "' ><span class='span-ad-bar-folder'>" + folder_name + "</span></div></div>" );
+	}	
+};
+/**************************** END - FUNCTION - UPDATE ADDRESS BAR ******************************************************/
+
 
 
 
@@ -746,23 +756,23 @@ $.fn.drawIcon = function (icon) {
 /************************************ FUNCTION ENABLE RENAME FOLDER ******************************************************************/
 
 $.fn.enableRenameFolder = function (icon_key) {
-	
+	console.log( "enableRenameFolder()" );
 	//get current name of the folder. this is to highlight the name in edit box
-	var current_name = $("#"+icon_key).find(".span-thumbnail-desc-hook").html();
+	var current_name = $( "#"+icon_key).find( ".span-thumbnail-desc-hook" ).html();
 		
 	name_form = "<form id='form-icon-rename' action='javascript:void(0);'><input id='tbox-icon-rename' type='text' value='"+current_name+"'></form>";
 	
 	//change the name value with the above form
-	$("#"+icon_key).find(".span-thumbnail-desc-hook").html(name_form);
+	$( "#"+icon_key).find( ".span-thumbnail-desc-hook" ).html(name_form);
 	//Get focus to the text box and select all text inside it
-	$("#"+icon_key).find("#tbox-icon-rename").focus().select();
+	$( "#"+icon_key).find( "#tbox-icon-rename" ).focus().select();
 	
 	//attach evnet listener to the newly created form above
 	$( "#form-icon-rename" ).submit(function( event ) {
 		
-		console.log("Submit detected -renaming folder");
+		console.log( "Submit detected -renaming folder" );
 		//get new name of the folder
-		var new_name = $("#"+icon_key).find("#tbox-icon-rename").val();
+		var new_name = $( "#"+icon_key).find( "#tbox-icon-rename" ).val();
 	
 		//call fucntion to save the new name to the backend server
 		$.fn.renameFolder(icon_key, new_name);
@@ -774,7 +784,7 @@ $.fn.enableRenameFolder = function (icon_key) {
 	$( "#form-icon-rename" ).focusout(function( event ) {
 		
 		//get new name of the folder
-		var new_name = $("#"+icon_key).find("#tbox-icon-rename").val();
+		var new_name = $( "#"+icon_key).find( "#tbox-icon-rename" ).val();
 		
 		//call fucntion to save the new name to the backend server
 		$.fn.renameFolder(icon_key, new_name);
@@ -787,56 +797,13 @@ $.fn.enableRenameFolder = function (icon_key) {
 
 
 
-
-/************************************ FUNCTION ENABLE RENAME FILE ******************************************************************/
-
-$.fn.enableRenameFile = function (icon_key) {
-	
-	//get current name of the folder. this is to highlight the name in edit box
-	var current_name = $("#"+icon_key).find(".span-thumbnail-desc-hook").html();
-		
-	name_form = "<form id='form-icon-rename' action='javascript:void(0);'><input id='tbox-icon-rename' type='text' value='"+current_name+"'></form>";
-	
-	//change the name value with the above form
-	$("#"+icon_key).find(".span-thumbnail-desc-hook").html(name_form);
-	//Get focus to the text box and select all text inside it
-	$("#"+icon_key).find("#tbox-icon-rename").focus().select();
-	
-	//attach evnet listener to the newly created form above
-	$( "#form-icon-rename" ).submit(function( event ) {
-		//get new name of the folder
-		var new_name = $("#"+icon_key).find("#tbox-icon-rename").val();
-	
-		//call fucntion to save the new name to the backend server
-		$.fn.renameFile(icon_key, new_name);
-		
-		//prevent browser default form submit action
-		event.preventDefault();
-	});
-	
-	$( "#form-icon-rename" ).focusout(function( event ) {
-		//get new name of the folder
-		var new_name = $("#"+icon_key).find("#tbox-icon-rename").val();
-		
-		//call fucntion to save the new name to the backend server
-		$.fn.renameFile(icon_key, new_name);
-	});
-
-	
-};
-
-/************************************ END - FUNCTION ENABLE RENAME FILE************************************************************/
-
-
-
-
 /************************************ FUNCTION DRAW FOLDER ************************************************************/
 
 $.fn.drawNewFolder = function (folder_key) {
-	
+	console.log( "drawNewFolder()" );
 	new_folder = "<div class='div-thumbnail div-thumbnail-hook' id = '" + folder_key + "' data-type='folder'><div class='div-thumbnail-icon'><img class='img-thumbnail-folder-icon' src='/images/folder-icon.png'></img></div><div class='div-thumbnail-desc div-thumbnail-desc-hook' title='New Folder'><span class='span-thumbnail-desc span-thumbnail-desc-hook'>New Folder</span></div></div>";
 	
-	$("#div-contents").append(new_folder);
+	$( "#div-contents" ).append(new_folder);
 
 	$.fn.enableRenameFolder(folder_key);
 };
@@ -847,13 +814,13 @@ $.fn.drawNewFolder = function (folder_key) {
 /************************************ FUNCTION ADD FOLDER ************************************************************/
 
 $.fn.addNewFolder = function (folder_id) {
-	
+	console.log( "addNewFolder()" );
 	var action = "addfolder";
 	var params = {
 		"parent_folder_key" : g_current_folder_key
 	};
 	
-	$.post("folder",{
+	$.post( "folder",{
 			action : action,
 			params : JSON.stringify(params)
 	})
@@ -863,7 +830,7 @@ $.fn.addNewFolder = function (folder_id) {
 		
 	})
 	.fail(function(){
-		console.log("addfolder post failed");
+		console.log( "addfolder post failed" );
 	});
 
 };
@@ -873,9 +840,9 @@ $.fn.addNewFolder = function (folder_id) {
 /**************************** FUNCTION TO RENAME FOLDER ******************************************************/
 
 $.fn.renameFolder = function (folder_key, name) {
-	
-	$("#"+folder_key).find(".span-thumbnail-desc-hook").html(name);
-	$("#"+folder_key).find(".div-thumbnail-desc-hook").attr("title", name);
+	console.log( "renameFolder()" );
+	$( "#"+folder_key).find( ".span-thumbnail-desc-hook" ).html(name);
+	$( "#"+folder_key).find( ".div-thumbnail-desc-hook" ).attr( "title", name);
 	
 	var action = "updatefolder";
 	var params = {
@@ -883,7 +850,7 @@ $.fn.renameFolder = function (folder_key, name) {
 		"new_name" : name
 	};
 		
-	$.post("folder",{
+	$.post( "folder",{
 			action : action,
 			params : JSON.stringify(params)
 	})
@@ -891,7 +858,7 @@ $.fn.renameFolder = function (folder_key, name) {
 			
 	})
 	.fail(function(){
-		console.log("updatefolder post failed");
+		console.log( "updatefolder post failed" );
 	});
 
 	
@@ -904,7 +871,7 @@ $.fn.renameFolder = function (folder_key, name) {
 
 
 $.fn.moveFolder = function (object_key, target_folder_key) {
-
+	console.log( "moveFolder()" );
 	var action = "movefolder";
 	var params = {
 		"folder_key" : object_key,
@@ -912,7 +879,7 @@ $.fn.moveFolder = function (object_key, target_folder_key) {
 	};
 	
 	
-	$.post("folder",{
+	$.post( "folder",{
 		action : action,
 		params : JSON.stringify(params)
 	})
@@ -921,7 +888,7 @@ $.fn.moveFolder = function (object_key, target_folder_key) {
 		
 	})
 	.fail(function(){
-		console.log("movefolder post failed");
+		console.log( "movefolder post failed" );
 	}); 
 
 };
@@ -937,7 +904,7 @@ $.fn.moveFolder = function (object_key, target_folder_key) {
 
 
 $.fn.copyFolder = function (object_key, target_folder_key) {
-
+	console.log( "copyFolder()" );
 	var action = "copyfolder";
 	var params = {
 		"folder_key" : object_key,
@@ -945,7 +912,7 @@ $.fn.copyFolder = function (object_key, target_folder_key) {
 	};
 	
 		
-	$.post("folder",{
+	$.post( "folder",{
 		action : action,
 		params : JSON.stringify(params)
 	})
@@ -953,7 +920,7 @@ $.fn.copyFolder = function (object_key, target_folder_key) {
 		
 	})
 	.fail(function(){
-		console.log("copyfolder post failed");
+		console.log( "copyfolder post failed" );
 	}); 
 
 };
@@ -968,14 +935,14 @@ $.fn.copyFolder = function (object_key, target_folder_key) {
 /************************************ FUNCTION DELETE FOLDER ************************************************************/
 
 $.fn.deleteFolder = function (icon_key) {
-		
+	console.log( "deleteFolder()" );
 	var action = "deletefolder";
 	var params = {
 		"folder_key" : icon_key
 	};
 	
 	
-	$.post("folder",{
+	$.post( "folder",{
 			action : action,
 			params : JSON.stringify(params)
 	})
@@ -983,7 +950,7 @@ $.fn.deleteFolder = function (icon_key) {
 			
 	})
 	.fail(function(){
-		console.log("deletefolder post failed");
+		console.log( "deletefolder post failed" );
 	});
 	
 };
@@ -997,13 +964,9 @@ $.fn.deleteFolder = function (icon_key) {
 
 /************************************ FUNCTION OPEN FOLDER ************************************************************/
 
-$.fn.openFolder = function (folder) {
-	
-	//NOTE!     not calling function displayFolderContents because, we need to update address bar only after a successful post to viewfolder
-	
-	var folder_id =  folder.id;
-	var folder_name =  $(folder).find(".div-thumbnail-desc-hook").attr("title");		//get name of the folder from the description
-				
+$.fn.openFolder = function (folder_id) {
+	console.log( "openFolder()" );
+	//console.log("caller is " + arguments.callee.caller.toString());   //to know who is calling this function			
 	//set variables to be posted to server to retrieve the folder contents
 	var action = "viewfolder";
 	var params = {
@@ -1012,26 +975,27 @@ $.fn.openFolder = function (folder) {
 	
 	// Post the action and get contents from the server and display the contents
 	
-	$.post("folder",{
+	$.post( "folder",{
 			action : action,
 			params : JSON.stringify(params)
 	})
 	.done(function(data,status){
 		
-		//conver the jason data in the server response to javascript object
+		//conver the json data in the server response to javascript object
 		folder_contents = JSON.parse(data);
-		
+	
+		//Change the current folder key with data from the server
 		g_current_folder_key = folder_contents["current_folder"].key;
 		
-		//update address bar
-		$( "#div-address-bar" ).append("<div class='div-ad-bar-element'><div class='div-ad-bar-seperator'><span class='span-ad-bar-seperator'>►</span></div><div id='" + folder_id + "' class='div-ad-bar-folder div-ad-bar-folder-hook' title='" + folder_name + "' ><span class='span-ad-bar-folder'>" + folder_name + "</span></div></div>");
+		//update address bar		
+		$.fn.updateAddressBar( folder_contents["folder_path"] );
 		
 		//draw icons from the server response
 		$.fn.drawIcons(folder_contents);
 		
 	})
 	.fail(function() {
-		console.log("view folder post failed");
+		console.log( "view folder post failed" );
 	});
 
 };
@@ -1057,48 +1021,52 @@ $.fn.openFolder = function (folder) {
 
 
 
-/*****************************************FUNCTION ADD FILE **********************************************************/
 
-$.fn.addFile = function (name, url, parent_folder) {
-	
-	var action = "addlink";
-	var params = {
-		"name" : name,
-		"url" : url,
-		"parent" : parent_folder
-	};
-	
-	
-	$.post("link",{
-			action : action,
-			params : JSON.stringify(params)
-	})
-	.done(function(data,status){
+/************************************ FUNCTION ENABLE RENAME FILE ******************************************************************/
+
+$.fn.enableRenameFile = function (icon_key) {
+	console.log( "enableRenameFile()" );
+	//get current name of the folder. this is to highlight the name in edit box
+	var current_name = $( "#"+icon_key).find( ".span-thumbnail-desc-hook" ).html();
 		
-		setTimeout(function(){
-			$.fn.refreshCurrentFolderView();
-			}, 300
-		);
-					
-		$.fn.closeWindow();
+	name_form = "<form id='form-icon-rename' action='javascript:void(0);'><input id='tbox-icon-rename' type='text' value='"+current_name+"'></form>";
+	
+	//change the name value with the above form
+	$( "#"+icon_key).find( ".span-thumbnail-desc-hook" ).html(name_form);
+	//Get focus to the text box and select all text inside it
+	$( "#"+icon_key).find( "#tbox-icon-rename" ).focus().select();
+	
+	//attach evnet listener to the newly created form above
+	$( "#form-icon-rename" ).submit(function( event ) {
+		//get new name of the folder
+		var new_name = $( "#"+icon_key).find( "#tbox-icon-rename" ).val();
+	
+		//call fucntion to save the new name to the backend server
+		$.fn.renameFile(icon_key, new_name);
 		
-	})
-	.fail(function(){
-		console.log("addlink post failed");
-	});	
+		//prevent browser default form submit action
+		event.preventDefault();
+	});
+	
+	$( "#form-icon-rename" ).focusout(function( event ) {
+		//get new name of the folder
+		var new_name = $( "#"+icon_key).find( "#tbox-icon-rename" ).val();
+		
+		//call fucntion to save the new name to the backend server
+		$.fn.renameFile(icon_key, new_name);
+	});
+
 	
 };
- 
-/*****************************************FUNCTION ADD FILE **********************************************************/
 
-
+/************************************ END - FUNCTION ENABLE RENAME FILE************************************************************/
 
 
 /**************************** FUNCTION TO COPY FILE ******************************************************/
 
 
 $.fn.copyFile = function (object_key, target_folder_key) {
-
+	console.log( "copyFile()" );
 	var action = "copylink";
 	var params = {
 		"link_key" : object_key,
@@ -1106,7 +1074,7 @@ $.fn.copyFile = function (object_key, target_folder_key) {
 	};
 	
 	
-	$.post("link",{
+	$.post( "link",{
 			action : action,
 			params : JSON.stringify(params)
 	})
@@ -1114,7 +1082,7 @@ $.fn.copyFile = function (object_key, target_folder_key) {
 		
 	})
 	.fail(function(){
-		console.log("copylink post failed");
+		console.log( "copylink post failed" );
 	}); 
 
 };
@@ -1129,7 +1097,7 @@ $.fn.copyFile = function (object_key, target_folder_key) {
 
 
 $.fn.moveFile = function (object_key, target_folder_key) {
-
+	console.log( "moveFile()" );
 	var action = "movelink";
 	var params = {
 		"link_key" : object_key,
@@ -1137,7 +1105,7 @@ $.fn.moveFile = function (object_key, target_folder_key) {
 	};
 	
 	
-	$.post("link",{
+	$.post( "link",{
 			action : action,
 			params : JSON.stringify(params)
 	})
@@ -1145,7 +1113,7 @@ $.fn.moveFile = function (object_key, target_folder_key) {
 
 	})
 	.fail(function(){
-		console.log("addfolder post failed");
+		console.log( "addfolder post failed" );
 	}); 
 
 };
@@ -1158,8 +1126,9 @@ $.fn.moveFile = function (object_key, target_folder_key) {
 /**************************** FUNCTION TO RENAME FILE ******************************************************/
 
 $.fn.renameFile = function (link_key, name) {
-	$("#"+link_key).find(".span-thumbnail-desc-hook").html(name);
-	$("#"+link_key).find(".div-thumbnail-desc-hook").attr("title", name);
+	console.log( "renameFile()" );
+	$( "#"+link_key).find( ".span-thumbnail-desc-hook" ).html(name);
+	$( "#"+link_key).find( ".div-thumbnail-desc-hook" ).attr( "title", name);
 	
 	var action = "updatelink";
 	var params = {
@@ -1168,7 +1137,7 @@ $.fn.renameFile = function (link_key, name) {
 	};
 	
 	
-	$.post("link",{
+	$.post( "link",{
 			action : action,
 			params : JSON.stringify(params)
 	})
@@ -1176,7 +1145,7 @@ $.fn.renameFile = function (link_key, name) {
 			
 	})
 	.fail(function(){
-		console.log("updatelink post failed");
+		console.log( "updatelink post failed" );
 	});
 		
 };
@@ -1189,14 +1158,14 @@ $.fn.renameFile = function (link_key, name) {
 /************************************ FUNCTION DELETE FILE ************************************************************/
 
 $.fn.deleteFile = function (icon_key) {
-		
+	console.log( "deleteFile()" );	
 	var action = "deletelink";
 	var params = {
 		"link_key" : icon_key
 	};
 	
 	
-	$.post("link",{
+	$.post( "link",{
 			action : action,
 			params : JSON.stringify(params)
 	})
@@ -1204,7 +1173,7 @@ $.fn.deleteFile = function (icon_key) {
 		
 	})
 	.fail(function(){
-		console.log("addfolder post failed");
+		console.log( "addfolder post failed" );
 	});
 	
 };
@@ -1218,7 +1187,7 @@ $.fn.deleteFile = function (icon_key) {
 /*****************************************FUNCTION OPEN FILE **********************************************************/
 
 $.fn.openFile = function (url) {
-	
+	console.log( "openFile()" );
 	window.open(url);
 
 };
@@ -1226,5 +1195,4 @@ $.fn.openFile = function (url) {
 /*********************************** END FUNCTION OPEN FILE ************************************************/
 
 
-
-
+	

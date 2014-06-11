@@ -44,9 +44,9 @@ def renderFolderPage(page):
 
     #get current user datastore object 
     usr = getCurrentUser()   
-
+    
     #get system folder keys for this user and covert keys to urlsafe
-    folder_mydrive = usr.sysfolder_mydrive.get()
+    folder_links = usr.sysfolder_links.get()
     folder_videos = usr.sysfolder_videos.get()
     folder_articles = usr.sysfolder_articles.get()
     folder_images = usr.sysfolder_images.get()
@@ -55,7 +55,7 @@ def renderFolderPage(page):
     template_values = {
                     'message': greeting,
                     'logout_url': logout_url,
-                    'folder_mydrive' : folder_mydrive,
+                    'folder_links' : folder_links,
                     'folder_videos' : folder_videos,
                     'folder_articles' : folder_articles,
                     'folder_images' : folder_images,
@@ -89,7 +89,7 @@ def renderTestFolderPage(page):
     usr = getCurrentUser()   
 
     #get system folder keys for this user and covert keys to urlsafe
-    folder_mydrive = usr.sysfolder_mydrive.get()
+    folder_links = usr.sysfolder_links.get()
     folder_videos = usr.sysfolder_videos.get()
     folder_articles = usr.sysfolder_articles.get()
     folder_images = usr.sysfolder_images.get()
@@ -98,7 +98,7 @@ def renderTestFolderPage(page):
     template_values = {
                     'message': greeting,
                     'logout_url': logout_url,
-                    'folder_mydrive' : folder_mydrive,
+                    'folder_links' : folder_links,
                     'folder_videos' : folder_videos,
                     'folder_articles' : folder_articles,
                     'folder_images' : folder_images,

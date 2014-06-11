@@ -40,7 +40,7 @@ class User(ndb.Model):
     sysfolder_apps = ndb.KeyProperty(kind='Folder')
     sysfolder_articles = ndb.KeyProperty(kind='Folder')
     sysfolder_images =  ndb.KeyProperty(kind='Folder')
-    sysfolder_mydrive = ndb.KeyProperty(kind='Folder')
+    sysfolder_links = ndb.KeyProperty(kind='Folder')
     sysfolder_root = ndb.KeyProperty(kind='Folder')
     sysfolder_videos = ndb.KeyProperty(kind='Folder')
     user_name = ndb.StringProperty()  #User full name

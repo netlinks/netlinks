@@ -18,15 +18,15 @@ class MainPage(webapp2.RequestHandler):
 	def get(self):
 		
 		if not isUserSignedIn(): 						#If user is not signed in redirect to welcome page
-			logging.debug(' Mainpage.get(): User is not signed in, redirecting to login page')
+			logging.info(' Mainpage.get(): User is not signed in, redirecting to login page')
 			renderWelcomePage(self)        #call for the function to render welcome page
 			return			
 		
 		#If user is signed in but not registered, register the user - add user to system and render folder page
 		elif not isUserSignedUp():	
-			logging.debug('Mainpage.get(): User is not signed up. Adding user.')
+			logging.info('Mainpage.get(): User is not signed up. Adding user.')
 			addUser()
-			logging.debug('Mainpage.get(): User added. Now rendering folder view')
+			logging.info('Mainpage.get(): User added. Now rendering folder view')
 			renderFolderPage(self)   #call for the function to render folders of a user
 			return
 		

@@ -49,5 +49,5 @@ def importServices(post):
     bookmarkTree = json.loads(post.request.get('bookmarkTree'))
     
     logging.info('importServices: Saving bookmarks')
-    saveBookmarks(bookmarkTree, usr.sysfolder_mydrive)
+    saveBookmarks(bookmarkTree, usr.sysfolder_root)
     

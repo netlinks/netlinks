@@ -9,10 +9,14 @@ body {
 .div-head-bar {
     background-color: rgba(255,255,255,.8);
     height: 35px;
-    filter: blur(10px);
+    position: fixed;
+    width: 100%;
+    z-index: 150;
 }
 
 #div-address-bar {
+    display: inline;
+    float: left;
     height: 30px;
     position: relative;
     top: 2.5px;
@@ -35,6 +39,12 @@ body {
     height: 30px;
     vertical-align: middle;
     width: 30px;
+}
+
+#div-ad-bar-elmts-container {
+    float: left;
+    height: 30px;
+    overflow: hidden;
 }
 
 .div-ad-bar-element {
@@ -85,13 +95,38 @@ body {
     color: rgba(22, 7, 192, 0.8);
 }
 
+#div-power-button {
+    cursor: pointer;
+    float: right;
+    position: relative;
+    top: 10px;
+    margin-right: 6px;    
+}
+
+#img-power-button {
+    content: url("/images/power-button.png");
+    height: 17px;
+    width: 17px;
+    -webkit-filter: drop-shadow(1px 1px 1px rgba(255,255,255,1));
+}
+#img-power-button:hover {
+    content: url("/images/power-button-highlight.png");
+    height: 17px;
+    width: 17px;
+    -webkit-filter: drop-shadow(1px 1px 1px rgba(255,255,255,1));    
+}
+
 .div-contents {
+    bottom: 0;
+    left: 0;
     overflow: auto;
     padding-bottom: 15px;
     padding-left: 25px;
     padding-right: 25px;
     padding-top: 15px;
-    
+    position: absolute;
+    right: 0;
+    top: 35px;    
 }
 
 .div-thumbnail {

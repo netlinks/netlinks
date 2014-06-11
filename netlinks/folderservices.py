@@ -69,17 +69,13 @@ def addFolder(params):
         params['parent_folder_key'].get().n_items += 1 
         params['parent_folder_key'].get().put()
         
-    else:                                                       #if no parent folder mentioned, set parent as mydrive        
-        #folder.parent_folder = usr.sysfolder_mydrive            #TODO need to set parent as 'mydrive' 
-        #folder.path = params['parent_folder_key'].get().path + folder.name + '/'    #calculate path from parent folder and save - parent folder path + my name
-        
-        ###### Add folder always have to have a parent. Otherwise it will not be added
-        return
-        
-      
+        #TODO if no parent folder mentioned, set parent as links
+                
+    logging.info('Adding Folder - ' + folder.name)  
+    
     new_folder_key = folder.put()     #save the folder and capture the key
     
-    return new_folder_key.urlsafe()    # return the folder key
+    return new_folder_key    # return the folder key
         
      
     
@@ -281,6 +277,8 @@ def copyAllSubFolders(folder, target_folder):
 
 def getFolderContents(params):
     logging.info('getFolderContents(): Start')
+    
+    folder_key = params['folder_key']
          
     #temporary class to save folder details temporarily before saving it in to folder dictionary. 
     class linkclass: 
@@ -350,6 +348,8 @@ def getFolderContents(params):
     #add current folder details to the dictionary
     folder_contents_dict['current_folder'] = current_folder_temp.__dict__
     
+    folder_contents_dict['folder_path'] = getFolderPath(folder_key)    
+    
     #convert python dictionary in to json format
     folder_contents_json = json.dumps(folder_contents_dict)
     
@@ -357,6 +357,33 @@ def getFolderContents(params):
     return folder_contents_json
         
    
+##################################################################################################################
+
+def getFolderPath(folder_key):
+    logging.info('getFolderPath(): Start')
+    
+    #temporary class to save folder details temporarily before saving it in to folder dictionary. 
+    class folderclass: 
+        pass
+
+    #declare list to store list of folders.
+    folder_path = []
+    
+    while folder_key.get().parent_folder:
+        folder = folder_key.get()
+        folder_temp = folderclass()             #create temporary folder object
+                
+        folder_temp.key = folder.key.urlsafe()  #save current folder details
+        folder_temp.name = folder.name        
+        logging.info(folder.name)
+        
+        folder_path.append(folder_temp.__dict__)         #add the temp folder to the list
+        
+        folder_key = folder.parent_folder
+    
+    return folder_path
+    
+
 ##################################################################################################################
 
 
@@ -368,16 +395,16 @@ def addSystemFolders():
     root_key = addRootFolder()  
     
     #set parameters for other system folder. set parent as root key
-    mydrive = {
-        'name' : 'mydrive',
+    links = {
+        'name' : 'Links',
         'icon' : '/images/folder-icon.png',
-        'color' : 'mydrive_color',
+        'color' : 'links_color',
         'view' : 'grid',
         'parent_folder_key' : root_key
     }
     
     videos = {
-        'name' : 'videos',
+        'name' : 'Videos',
         'icon' : '/images/folder-icon.png',
         'color' : 'videos_color',
         'view' : 'grid',
@@ -386,7 +413,7 @@ def addSystemFolders():
     }
     
     articles = {
-        'name' : 'articles',
+        'name' : 'Articles',
         'icon' : '/images/folder-icon.png',
         'color' : 'articles_color',
         'view' : 'grid',
@@ -394,7 +421,7 @@ def addSystemFolders():
     }
     
     images = {
-        'name' : 'images',
+        'name' : 'Images',
         'icon' : '/images/folder-icon.png',
         'color' : 'images_color',
         'view' : 'grid',
@@ -402,7 +429,7 @@ def addSystemFolders():
     }
 
     apps = {
-        'name' : 'apps',
+        'name' : 'Apps',
         'icon' : '/images/folder-icon.png',
         'color' : 'apps_color',
         'view' : 'grid',
@@ -413,7 +440,7 @@ def addSystemFolders():
     #create the folder and capture the keys to return
     sys_folder_keys = {
         'root' : root_key,
-        'mydrive' : addFolder(mydrive),
+        'links' : addFolder(links),
         'videos' : addFolder(videos),
         'articles' : addFolder(articles),
         'images' : addFolder(images),
@@ -441,7 +468,7 @@ def folderServices(page):
         params['parent_folder_key'] = ndb.Key(urlsafe=params['parent_folder_key']) 
         folder = addFolder(params)
         status = 'success addfolder'
-        page.response.out.write(folder)
+        page.response.out.write(folder.urlsafe())
         
         
     elif action == 'updatefolder':
