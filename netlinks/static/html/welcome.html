@@ -1,6 +1,54 @@
 <html>
-	<body>
-		<h1>Welcome Page </h1>
-		<a href="{{login_url}}">Login using your google account</a>
+	<head>
+		<style type="text/css">
+		.div-container {
+			height: 600px;
+			width: 1000px;
+			position: relative;
+			top: 10%;
+			margin-left: auto;
+			margin-right: auto;
+			background: rgba(255, 255, 255, 0.73);
+			border-radius: 20px 20px 20px 20px;
+		}
+		.div-banner {
+			position: relative;
+			top: 150px;
+		}
+		.span-banner {
+			font-family: roboto;
+			font-size: 3em;
+			display: block;
+			text-align: center;
+			font-weight: 100;
+			text-shadow: 0 0 20px rgba(0, 0, 0, 0.86);
+		}
+		.div-login-button {
+			height: 55px;
+			margin-left: auto;
+			margin-right: auto;
+			position: relative;
+			top: 200px;
+			width: 251px;
+		}
+		.img-login-button {
+			height: 55;
+			width: 251;
+		}
+			
+		</style>
+		<link href="http://roboto-webfont.googlecode.com/svn/trunk/roboto.all.css" rel="stylesheet" type="text/css">
+	</head>
+	<body background="/images/nature.jpg">
+		<div class="div-container" >
+			<div class="div-banner">
+				<span class="span-banner">Welcome to <span style="color: rgb(46, 0, 192); font-size: 2em;">NetLinks</span></span>
+			</div>
+			<div class="div-login-button">
+				<a href="{{login_url}}">
+					<img class="img-login-button" src="/images/sign-in-with-google.png" alt="Sign in with Google" title="Sign in with Google"/>
+				</a>
+			</div>
+		</div>
 	</body>
 </html>

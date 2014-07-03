@@ -8,6 +8,7 @@ body {
 
 .div-head-bar {
     background-color: rgba(255,255,255,.8);
+    box-shadow: 0px 0px 20px 0px rgba(124, 124, 124, 0.92);
     height: 35px;
     position: fixed;
     width: 100%;
@@ -16,6 +17,7 @@ body {
 
 #div-address-bar {
     display: inline;
+    border-right: 1px solid rgb(224, 224, 224);
     float: left;
     height: 30px;
     position: relative;
@@ -87,34 +89,31 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     position: relative;
-    text-shadow: 0 1px 0 rgb(236, 236, 236);
     top: 11px;
     white-space: nowrap;
 }
 .span-ad-bar-folder:hover {
-    color: rgba(22, 7, 192, 0.8);
+    color: rgba(20, 0, 247, 0.8);
 }
 
 #div-power-button {
-    cursor: pointer;
     float: right;
+    margin-right: 6px;    
     position: relative;
     top: 10px;
-    margin-right: 6px;    
 }
 
 #img-power-button {
-    content: url("/images/power-button.png");
+    background: url("/images/power-button.png") no-repeat; 
+    background-size:   contain;
     height: 17px;
     width: 17px;
-    -webkit-filter: drop-shadow(1px 1px 1px rgba(255,255,255,1));
 }
 #img-power-button:hover {
-    content: url("/images/power-button-highlight.png");
-    height: 17px;
-    width: 17px;
-    -webkit-filter: drop-shadow(1px 1px 1px rgba(255,255,255,1));    
-}
+    background: url("/images/power-button-highlight.png") no-repeat;
+    background-size:   contain;
+    -webkit-filter: drop-shadow(0px 0px 5px rgb(236, 127, 127));
+}    
 
 .div-contents {
     bottom: 0;
@@ -144,13 +143,12 @@ body {
 }
 
 .div-thumbnail:hover {
-    background-color: rgba(255,255,255,.3);
-    /*border: 1px rgba(255,255,255,.5);*/  
+    background-color: rgba(234, 241, 253, 0.7);
 }
 
 
 .div-thumbnail-droppable {   /*to hightilgh when an element is dragged over to the icon*/
-    background-color: rgba(255,255,255,.7);
+    background-color: rgba(185, 208, 248, 0.7);
     border-radius:  8px 8px 8px 8px;
     float: left;
     height: 130px;
@@ -183,7 +181,7 @@ body {
 }
 
 .span-thumbnail-desc {
-    color: rgb(238, 238, 238);
+    color: rgb(60, 60, 60);
     display: inline-block;
     font-family: verdana, sans-serif;
     font-size: .9em;
@@ -191,7 +189,6 @@ body {
     overflow: hidden;
     text-align: center;
     text-overflow:  ellipsis;  /* for dotted lines to indicated hidden text*/
-    text-shadow: rgba(0, 0, 0, 0.8) 0 0 3px;
     width: 108px;    
     white-space: nowrap;
 }
@@ -215,5 +212,6 @@ body {
 
 #tbox-icon-rename{
     text-align: center;
-    width: 100px;    
+    width: 100px;
+    height: 14px;    
 }

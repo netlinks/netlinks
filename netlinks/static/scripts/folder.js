@@ -68,13 +68,6 @@ $( document ).ready( function() {
 	});
 	
 	
-	/************************************ On Click on power button ************************************************************/
-	
-	$(document).on( "click", "#div-power-button" , function() {
-		window.close();     
-	});
-	
-
 	/************************************ON  CLICK ON ICONS ************************************************************/	
 	
 	$(document).on( "click", ".div-thumbnail-hook" , function() {         

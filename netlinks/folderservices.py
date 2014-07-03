@@ -294,7 +294,7 @@ def getFolderContents(params):
     
     #get links in this folder
     #create query to find links with filter parent_folder = (params["folder_key"]) - folder key retrieved from the GUI interface
-    links = Link.query(Link.parent_folder==params['folder_key']).fetch()
+    links = Link.query(Link.parent_folder==params['folder_key']).order(Link.name).fetch()
     
     #iterate through links retrieved by above query
     for link in links:
@@ -315,7 +315,7 @@ def getFolderContents(params):
     
     #get subfolders in this folder
     #create query to find folders with filter parent_folder = (params["folder_key"]) - folder key retrieved  from the GUI interface
-    subfolders = Folder.query(Folder.parent_folder==params['folder_key']).fetch()
+    subfolders = Folder.query(Folder.parent_folder==params['folder_key']).order(Folder.name).fetch()
        
     #iterate through folder contents retrieved by above query           
     for folder in subfolders:

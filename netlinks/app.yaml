@@ -11,7 +11,6 @@ handlers:
 
 - url: /images
   static_dir: static/images
-  login: required
 
 - url: /css
   static_dir: static/css
