@@ -15,7 +15,7 @@ $.fn.addFile = function (tab) {
 		"url" : tab.url,
 	};
 	
-	$.post("http://localhost:8080/link",{
+	$.post("http://net-links.appspot.com/link",{
 			action : action,
 			params : JSON.stringify(params)
 	})
@@ -31,7 +31,6 @@ $.fn.addFile = function (tab) {
 
 $.fn.updatePopup = function (data) {
 	console.log(data);
-	login_url = "http://localhost:8080/"
 	if (data == "LOGIN FAILED")
 	{
 		$("#container").load("login_fail.txt");
@@ -60,7 +59,7 @@ $.fn.saveBookmarks = function () {
 		
 		$("#container").load("progress.txt");
 				
-		$.post("http://localhost:8080/import",{
+		$.post("http://net-links.appspot.com/import",{
 			bookmarkTree : bookmarkTree
 		})
 		.done(function(data,status){
