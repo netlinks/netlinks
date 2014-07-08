@@ -12,5 +12,5 @@
   <div style="
     position: relative;
     top: -13px;
-">Please <a style="color:red" href="http://localhost:8080/" target="_blank">Login</a></div>
+">Please <a style="color:red" href="http://net-links.appspot.com/" target="_blank">Login</a></div>
 </div>
