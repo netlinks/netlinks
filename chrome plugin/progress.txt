@@ -1,0 +1,4 @@
+<img src="/progress.gif" style="
+    position: relative;
+    top: -13px;
+">

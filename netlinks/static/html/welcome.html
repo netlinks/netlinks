@@ -1,5 +1,4 @@
-<html>
-	<head>
+<html><head>
 		<style type="text/css">
 		.div-container {
 			height: 600px;
@@ -8,20 +7,21 @@
 			top: 10%;
 			margin-left: auto;
 			margin-right: auto;
-			background: rgba(255, 255, 255, 0.73);
-			border-radius: 20px 20px 20px 20px;
-		}
+			background: rgba(24, 21, 21, 0.73);
+			border-radius: 10px 10px 10px 10px;
+					}
 		.div-banner {
 			position: relative;
 			top: 150px;
 		}
 		.span-banner {
 			font-family: roboto;
+			color: rgb(197, 197, 197);
 			font-size: 3em;
 			display: block;
 			text-align: center;
 			font-weight: 100;
-			text-shadow: 0 0 20px rgba(0, 0, 0, 0.86);
+			text-shadow: 0 0 20px rgba(255, 255, 255, 0.86);
 		}
 		.div-login-button {
 			height: 55px;
@@ -34,21 +34,33 @@
 		.img-login-button {
 			height: 55;
 			width: 251;
+			-webkit-filter: brightness(0.8);
 		}
 			
 		</style>
 		<link href="http://roboto-webfont.googlecode.com/svn/trunk/roboto.all.css" rel="stylesheet" type="text/css">
 	</head>
-	<body background="/images/nature.jpg">
-		<div class="div-container" >
+	<body style="
+    margin: 0;
+">
+  <div style="
+    background-image: url(&quot;/images/nature.jpg&quot;);
+    height: 100%;  
+    width: 100%;            
+    position: absolute;
+    filter: blur(5px);
+    -webkit-filter: blur(10px);
+">
+  </div>
+  <div class="div-container">
 			<div class="div-banner">
-				<span class="span-banner">Welcome to <span style="color: rgb(46, 0, 192); font-size: 2em;">NetLinks</span></span>
+				<span class="span-banner">Welcome to <span style="color: rgb(45, 154, 255); font-size: 2em;">NetLinks</span></span>
 			</div>
 			<div class="div-login-button">
-				<a href="{{login_url}}">
-					<img class="img-login-button" src="/images/sign-in-with-google.png" alt="Sign in with Google" title="Sign in with Google"/>
+				<a href="/_ah/login?continue=http%3A//localhost%3A8080/">
+					<img class="img-login-button" src="/images/sign-in-with-google.png" alt="Sign in with Google" title="Sign in with Google">
 				</a>
 			</div>
 		</div>
-	</body>
-</html>
+	
+</body></html>

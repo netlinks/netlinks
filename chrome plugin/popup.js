@@ -7,6 +7,8 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 
 $.fn.addFile = function (tab) {
 	
+	$("#container").load("progress.txt");
+	
 	var action = "addlink";
 	var params = {
 		"name" : tab.title,
@@ -22,6 +24,7 @@ $.fn.addFile = function (tab) {
 	})
 	.fail(function(){
 		console.log("addlink post failed");
+		$("#container").html("Network Failure!");
 	});	
 	
 };
@@ -31,18 +34,19 @@ $.fn.updatePopup = function (data) {
 	login_url = "http://localhost:8080/"
 	if (data == "LOGIN FAILED")
 	{
-		$("body").html("<br>Please <a href='"+login_url+"' target='_blank'>Login</a>")
+		$("#container").load("login_fail.txt");
 	}
 	else if(data == "SUCCESS")
 	{
-		$("body").html("<br>Link Saved <br><br><p id='import' style='border-style:solid;border-width:1px;'>Import Bookmarks</p>")	
-		$("#import").click(function() {
+		$("#container").load("link_saved.txt");
+		$(document).on( "click", "#import" , function() {
 			$.fn.saveBookmarks();
 		});
 	}
 	else
 	{
 		console.log("Save failed. Something is wrong at server side.")
+		$("#container").html("Something is wrong :(");
 	}
 };
 
@@ -53,18 +57,24 @@ $.fn.saveBookmarks = function () {
 		
 		bookmarkTreeNodes[0].title = "Bookmarks"
 		var bookmarkTree = JSON.stringify(bookmarkTreeNodes[0])		//chrome returns array of objects. The first object is the bookmark tree
-		console.log(bookmarkTree);
 		
+		$("#container").load("progress.txt");
+				
 		$.post("http://localhost:8080/import",{
 			bookmarkTree : bookmarkTree
 		})
 		.done(function(data,status){
 			console.log(data);
+			$("#container").html("Bookmarks Saved");
 		})
 		.fail(function(){
 			console.log("addlink post failed");
+			$("#container").html("Network Failure!");
 		});	
 	});
 };
 
+$(document).on( "click", "#more" , function() {
+	$("#import").slideToggle("swing");
+});   
 

@@ -7,7 +7,8 @@ body {
 }
 
 .div-head-bar {
-    background-color: rgba(255,255,255,.8);
+    background: linear-gradient(to bottom, rgb(252, 252, 252) 27%,rgb(221, 221, 221) 97%);
+    border-bottom: rgb(243, 243, 243) solid 1px;
     box-shadow: 0px 0px 20px 0px rgba(124, 124, 124, 0.92);
     height: 35px;
     position: fixed;
@@ -17,7 +18,7 @@ body {
 
 #div-address-bar {
     display: inline;
-    border-right: 1px solid rgb(224, 224, 224);
+    border-right: 1px solid rgb(211, 211, 211);
     float: left;
     height: 30px;
     position: relative;
@@ -31,16 +32,28 @@ body {
     margin-left: 40px;
     width: 30px;
 }
+/*
 .div-home:hover {
     background-color: rgb(245,245,245);
     box-shadow: 1px 1px 1px 0px rgba(90,90,90,1);
     background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(230,230,230,1) 100%);
 }
+*/
 
-#img-home-icon {
-    height: 30px;
+#div-home-icon {
+    background: url("/images/home.png") no-repeat;
+    background-size:   contain; 
+    height: 23px;
+    left: 5px;
+    position: relative;
+    top: 3px;
     vertical-align: middle;
     width: 30px;
+    -webkit-filter: drop-shadow(2px 2px 0px #FFF);
+}
+#div-home-icon:hover {
+    background: url("/images/home-hglt.png") no-repeat;
+    background-size:   contain;     
 }
 
 #div-ad-bar-elmts-container {
@@ -66,7 +79,7 @@ body {
     cursor: default;
     font-size: .8em;
     position: relative;
-    text-shadow: 0 1px 0 rgb(243, 243, 243);
+    text-shadow: 1px 1px 0 rgb(255, 255, 255);
     top: 9px;
 }
 
@@ -81,19 +94,20 @@ body {
     color: rgba(36, 36, 36, 0.8);
     cursor: pointer;
     display: inline-block;
-    font-family: verdana, sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: .8em;
     font-weight: 700;
     max-width: 200px;
     min-width: 25px;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-shadow: 1px 1px 0 rgb(255, 255, 255);
     position: relative;
     top: 11px;
     white-space: nowrap;
 }
 .span-ad-bar-folder:hover {
-    color: rgba(20, 0, 247, 0.8);
+    color: rgba(5, 77, 206, 0.8);
 }
 
 #div-power-button {
@@ -108,11 +122,11 @@ body {
     background-size:   contain;
     height: 17px;
     width: 17px;
+    -webkit-filter: drop-shadow(2px 2px 0px #FFF);
 }
 #img-power-button:hover {
     background: url("/images/power-button-highlight.png") no-repeat;
     background-size:   contain;
-    -webkit-filter: drop-shadow(0px 0px 5px rgb(236, 127, 127));
 }    
 
 .div-contents {
@@ -161,18 +175,22 @@ body {
 .div-thumbnail-icon {
     border:  0px;
     height: 105px;
+    text-align: center;
     width: 108px;
+    
 }
 
 
 .img-thumbnail-folder-icon {
     height:  110px;
-    width:  107px;
+    width:  96px;
+    -webkit-filter: drop-shadow(1px 1px 2px #555);
 }
 
 .img-thumbnail-file-icon {
     height:  110px; 
     width:  107px;
+    -webkit-filter: drop-shadow(1px 1px 2px #555);
 }
 
 .div-thumbnail-desc {
@@ -181,10 +199,10 @@ body {
 }
 
 .span-thumbnail-desc {
-    color: rgb(60, 60, 60);
+    color: rgb(20, 20, 20);
     display: inline-block;
-    font-family: verdana, sans-serif;
-    font-size: .9em;
+    font-family: 'Roboto', sans-serif;
+    font-size: .85em;
     height: 20px;
     overflow: hidden;
     text-align: center;
@@ -194,12 +212,14 @@ body {
 }
 
 #ul-wspace-right-click-menu {
+    box-shadow: 1px 1px 5px 0px rgb(124, 124, 124);
     position: fixed;
     display: none;
     width: 120px;
 }
 
 #ul-icon-right-click-menu {
+    box-shadow: 1px 1px 5px 0px rgb(124, 124, 124);
     position: fixed;
     display: none;
     width: 120px;

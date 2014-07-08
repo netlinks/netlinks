@@ -1,0 +1,16 @@
+<div style="
+    background: linear-gradient(to bottom, rgb(252, 252, 252) 27%,rgb(221, 221, 221) 97%);
+    border-radius: 2px 2px 2px 2px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    /* vertical-align: middle; */
+">
+  <br>
+  <div style="
+    position: relative;
+    top: -13px;
+">Please <a style="color:red" href="http://localhost:8080/" target="_blank">Login</a></div>
+</div>
