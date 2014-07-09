@@ -266,7 +266,14 @@ $.fn.drawIcons = function (folder_contents) {
 			type = "folder";
 			for (j in folder_contents[i])
         	{
-          		txt = txt + "<div class='div-thumbnail div-thumbnail-hook' id = '"  + folder_contents[i][j].key + "' data-type='" + type + "'><div class='div-thumbnail-icon'><img class='img-thumbnail-folder-icon' src='" + folder_contents[i][j].icon + "'></img></div><div class='div-thumbnail-desc div-thumbnail-desc-hook' title='" + folder_contents[i][j].name + "'><span class='span-thumbnail-desc span-thumbnail-desc-hook'>" + folder_contents[i][j].name + "</span></div></div>";
+          		txt = txt + 	"<div class='div-thumbnail div-thumbnail-hook' id = '"  + folder_contents[i][j].key + "' data-type='" + type + "'>"+
+          							"<div class='div-thumbnail-icon'>"+
+          								"<img class='img-thumbnail-folder-icon' src='" + folder_contents[i][j].icon + "'>"+
+          							"</div>"+
+          							"<div class='div-thumbnail-desc div-thumbnail-desc-hook' title='" + folder_contents[i][j].name + "'>"+
+          								"<span class='span-thumbnail-desc span-thumbnail-desc-hook'>" + folder_contents[i][j].name + "</span>"+
+          							"</div>"+
+          						"</div>";
         	}
 	   	}
 		//if element is link, iterate though the list of links and construct the inner html
@@ -275,7 +282,29 @@ $.fn.drawIcons = function (folder_contents) {
 	   		type = "link";
 	   		for (j in folder_contents[i])
         	{
-          		txt = txt + "<div class='div-thumbnail  div-thumbnail-hook' id = '"  + folder_contents[i][j].key + "' data-type='" + type + "' data-url='" + folder_contents[i][j].url + "'><div class='div-thumbnail-icon'><img class='img-thumbnail-file-icon' src='" + file_icon + "' width='107px' height='110px'></img></div><div class='div-thumbnail-desc div-thumbnail-desc-hook' title='" + folder_contents[i][j].name + "'><span class='span-thumbnail-desc span-thumbnail-desc-hook'>" + folder_contents[i][j].name +"</span></div></div>";
+        		var url = folder_contents[i][j].url;
+        		var str = url.match(/^.*?\.(com|org|net|gov|in)/); 
+        		var favicon_url;
+        	
+        		if(str)
+        		{
+        			favicon_url = str[0] + "/favicon.ico";
+        		}
+        		else
+        		{
+        			favicon_url = "";
+        		}
+        		
+        		
+          		txt = txt + 	"<div class='div-thumbnail  div-thumbnail-hook' id = '"  + folder_contents[i][j].key + "' data-type='" + type + "' data-url='" + folder_contents[i][j].url + "'>"+
+          							"<div class='div-thumbnail-icon'>"+
+          								"<img class='img-thumbnail-file-icon' src='" + file_icon + "' width='107px' height='110px'>"+
+          							"</div>"+
+          							"<div class='div-thumbnail-desc div-thumbnail-desc-hook' title='" + folder_contents[i][j].name + "'>"+
+          								"<span class='span-thumbnail-desc span-thumbnail-desc-hook'>" + folder_contents[i][j].name +"</span>"+
+          							"</div>"+
+          							"<div class='div-favicon' style='background: url(" + favicon_url + ") no-repeat; background-size: contain;'></div>"+
+          						"</div>";
         	}
 	   	}
 	}
