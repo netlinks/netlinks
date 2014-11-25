@@ -1,9 +1,21 @@
-//get current active tab
-chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-		tab = tabs[0];
+
+//get current tab
+chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
+    tab = tabs[0];
+	if ( tab.url == "chrome://newtab/" )
+	{
+		console.log("New Tab Page. Redirecting to Netlinks Website");
+		window.close();		//hiding popup
+		chrome.tabs.update(tab.id, {url: "http://net-links.appspot.com"});	//redirect netlinks page
+	}
+	else
+	{
+		console.log("Saving Link");
 		$.fn.addFile(tab);
-		
-})
+	}
+});
+
+
 
 $.fn.addFile = function (tab) {
 	
@@ -30,12 +42,17 @@ $.fn.addFile = function (tab) {
 };
 
 $.fn.updatePopup = function (data) {
+	
 	console.log(data);
-	if (data == "LOGIN FAILED")
+	
+	response = JSON.parse(data);
+	if (response["status"] == "LOGIN_FAILED")
 	{
-		$("#container").load("login_fail.txt");
+		$("#container").load("login_fail.txt", function() {
+				$("#login_link").attr("href", response["login_url"]);		//run this once load of login_fail is completed. Load() is asynchronous
+		});		
 	}
-	else if(data == "SUCCESS")
+	else if(response["status"] == "SUCCESS")
 	{
 		$("#container").load("link_saved.txt");
 		$(document).on( "click", "#import" , function() {

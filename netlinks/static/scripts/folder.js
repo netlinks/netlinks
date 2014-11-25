@@ -1019,6 +1019,26 @@ $.fn.openFolder = function (folder_id) {
 	.fail(function() {
 		console.log( "view folder post failed" );
 	});
+	
+	
+	////test test testtest test testtest test testtest test test//
+	////test test testtest test testtest test testtest test test//
+	////test test testtest test testtest test testtest test test//
+	$.post( "folder",{
+			action : "getsubfolders",
+			params : JSON.stringify(params)
+	})
+	.done(function(data,status){
+		
+		console.log(data);
+		
+	})
+	.fail(function() {
+		console.log( "view folder post failed" );
+	});
+	////test test testtest test testtest test testtest test test//
+	////test test testtest test testtest test testtest test test//
+	////test test testtest test testtest test testtest test test//
 
 };
 

@@ -6,11 +6,10 @@
     bottom: 0;
     right: 0;
     left: 0;
-    /* vertical-align: middle; */
 ">
   <br>
   <div style="
     position: relative;
     top: -13px;
-">Please <a style="color:red" href="http://net-links.appspot.com/" target="_blank">Login</a></div>
+"><b>Please <a id= "login_link" style="color:red" href="http://net-links.appspot.com/" target="_blank">Login</a></div></b>
 </div>

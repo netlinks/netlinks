@@ -359,6 +359,40 @@ def getFolderContents(params):
    
 ##################################################################################################################
 
+def getSubFolders(folder_key):
+    logging.info('getSubfolders(): Start')
+    
+    #temporary class to save folder details temporarily before saving it in to folder dictionary. 
+    class folderclass: 
+        pass
+    
+    #declare alist to store subfolders. Lists needs to be declared before using it
+    subfolders_list = []
+        
+    #get subfolders in this folder
+    #create query to find folders with filter parent_folder = folder_key - folder key retrieved  from the GUI interface
+    subfolders = Folder.query(Folder.parent_folder==folder_key).order(Folder.name).fetch()
+    
+    #iterate through folder contents retrieved by above query           
+    for folder in subfolders:
+        folder_temp = folderclass()    #create instance of folderclass to temporarily store folder details before writing to dictionary.
+        
+        #assign folder details of datastore to temporary folder class
+    
+        folder_temp.key = folder.key.urlsafe()
+        folder_temp.name = folder.name        
+        
+        #append this folder details to the list. ___dict__ will return the dictionary format of the object
+        subfolders_list.append(folder_temp.__dict__)        
+    
+    #subfolders to json format
+    subfolders_json = json.dumps(subfolders_list)
+        
+    #return json object
+    return subfolders_json    
+    
+##################################################################################################################
+
 def getFolderPath(folder_key):
     logging.info('getFolderPath(): Start')
     
@@ -499,6 +533,22 @@ def folderServices(page):
              
         folder_contents = getFolderContents(params)
         page.response.out.write(folder_contents)
+    
+    elif action == 'getsubfolders':
+        logging.info('folderServices: retrieving subfolders')
+        
+        #If the requested folder is HOME, show root folder contents
+        if params['folder_key'] == 'HOME':
+            logging.info('folderService: Requested HOME folder. Retrieving root folder contents')
+            params['folder_key'] = usr.sysfolder_root
+            
+        else:
+            #convert the key to datastore key object before passing
+            params['folder_key'] = ndb.Key(urlsafe=params['folder_key'])
+             
+        subfolders = getSubFolders(params['folder_key'])
+        page.response.out.write(subfolders)
+        
         
     elif action == 'movefolder':
         logging.info('folderServices: moving folder')

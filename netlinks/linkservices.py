@@ -178,7 +178,7 @@ def linkServices(page):
         if 'parent' in params:
             params['parent'] = ndb.Key(urlsafe=params['parent']) #Convert  parent key to datastore format
         status = addLink(params)
-        page.response.out.write(status)
+        return status
         
     elif action == 'updatelink':
         logging.info('linkServices: calling updateLink')

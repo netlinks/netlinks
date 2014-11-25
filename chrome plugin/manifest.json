@@ -2,13 +2,13 @@
   "manifest_version": 2,
 
   "name": "NetLinks",
-  "description": "Save your favorite links to Netlinks",
-  "version": "1.1",
+  "description": "Save your favourite links online",
+  "version": "1.1.1.0",
   "icons": { "48": "drive-cloud.png"},
-
+ 
   "browser_action": {
-    "default_popup": "popup.html",
-	"default_icon": "drive-cloud.png"
+	"default_icon": "drive-cloud.png",
+	"default_popup": "popup.html" 
   },
   
   "permissions": [

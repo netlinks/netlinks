@@ -11,6 +11,7 @@ handlers:
 
 - url: /images
   static_dir: static/images
+  expiration: "1d 5h"
 
 - url: /css
   static_dir: static/css

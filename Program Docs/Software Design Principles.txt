@@ -1,0 +1,6 @@
+Requirements are bound to change - more older, more probable. So, Design/Code flexible
+Do not write the code you dont need NOW AND Delete the code that you dont need NOW.
+Incremental Design- Release earlier - iterate
+	Redisgn at each step (as if system is designed to do the things it does NOW) - DO NOT hack when iterate
+Dont be too generic - add code that is valuable to users
+Follow strict code review process

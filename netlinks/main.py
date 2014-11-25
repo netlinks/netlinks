@@ -1,6 +1,9 @@
 
 import webapp2
 import logging
+import json
+
+from google.appengine.api import users
 
 #import only required functions. Do not use wild import (*)
 from renderpages import renderWelcomePage, renderFolderPage, renderTestFolderPage
@@ -57,12 +60,16 @@ class Link(webapp2.RequestHandler):
 		
 		if not isUserSignedIn(): 						#If user is not signed in dont do anything
 			logging.info(' Link.post(): User is not signed in, exiting')
-			self.response.out.write("LOGIN FAILED")
+			login_url = users.create_login_url('/')
+			response = {"status" : "LOGIN_FAILED", "login_url" : login_url }
+			self.response.out.write(json.dumps(response))
 			return		
 		
 		logging.info('Link.post(): calling linkServices module')		
-		linkServices(self)		
-
+		status = linkServices(self)
+		response = {"status" : status} 
+		self.response.out.write(json.dumps(response))
+		
 ############################################ Application handling #####################################################
 
 class App(webapp2.RequestHandler):
