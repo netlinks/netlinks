@@ -37,8 +37,10 @@ $( document ).ready( function() {
  	//******************** Bind event listener to window. This is to enable browser back button functionality ****************//
 	//window.addEventListener('popstate', function(event) {
 	window.onpopstate = function(event) {
-		console.log("Browser Back/Forward triggered");			
-		$.fn.openFolder(event.state);
+		console.log("Browser Back/Forward triggered");	
+		console.log(event.state);
+		if (event.state != null)	
+			$.fn.openFolder(event.state);
     };
 	
 	//******************** On resize window adjust height of contents area ****************//
@@ -703,10 +705,10 @@ $.fn.refreshCurrentFolderView = function(){
 };
 
 	
-/**************************** FUNCTION - REFRESH CURRENT FOLDER******************************************************/	
+/**************************** END - FUNCTION - REFRESH CURRENT FOLDER******************************************************/	
 	
 	
-/**************************** FUNCTION - REFRESH CURRENT FOLDER******************************************************/
+/**************************** FUNCTION - DRAW ICONS******************************************************/
 $.fn.drawIcon = function (icon) {
 	console.log( "drawIcon()" );
 	$( "#div-contents" ).append(icon);
@@ -735,7 +737,7 @@ $.fn.drawIcon = function (icon) {
 	});	
 	
 };
-/**************************** FUNCTION - REFRESH CURRENT FOLDER******************************************************/
+/**************************** END - FUNCTION - DRAW ICONS******************************************************/
 
 
 
@@ -1020,7 +1022,7 @@ $.fn.openFolder = function (folder_id) {
 		console.log( "view folder post failed" );
 	});
 	
-	
+	/*
 	////test test testtest test testtest test testtest test test//
 	////test test testtest test testtest test testtest test test//
 	////test test testtest test testtest test testtest test test//
@@ -1039,7 +1041,7 @@ $.fn.openFolder = function (folder_id) {
 	////test test testtest test testtest test testtest test test//
 	////test test testtest test testtest test testtest test test//
 	////test test testtest test testtest test testtest test test//
-
+	*/
 };
 
 /************************************ FUNCTION OPEM FOLDER ************************************************************/
