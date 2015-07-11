@@ -113,18 +113,18 @@ class Import(webapp2.RequestHandler):
 ############################################ TEST TEST TEST TEST TEST #####################################################
 
 
-class Test(webapp2.RequestHandler):
-	def get(self):
-		
-		if not isUserSignedIn(): 						#If user is not signed in redirect to welcome page
-			logging.info(' Test.get(): User is not signed in, redirecting to login page')
-			renderWelcomePage(self)        #call for the function to render welcome page
-			return		
-		
-		#if user is logged in then..
-		logging.info('Test.get(): calling renderTestFolderPage module')
-		renderTestFolderPage(self)   #call for the function to render folders of a user
-		
+# class Test(webapp2.RequestHandler):
+# 	def get(self):
+# 		
+# 		if not isUserSignedIn(): 						#If user is not signed in redirect to welcome page
+# 			logging.info(' Test.get(): User is not signed in, redirecting to login page')
+# 			renderWelcomePage(self)        #call for the function to render welcome page
+# 			return		
+# 		
+# 		#if user is logged in then..
+# 		logging.info('Test.get(): calling renderTestFolderPage module')
+# 		renderTestFolderPage(self)   #call for the function to render folders of a user
+# 		
 
 ############################################## Entry Point ! ################################################################
 
@@ -134,7 +134,7 @@ app = webapp2.WSGIApplication([
 	('/link', Link),
 	('/app', App),
 	('/import', Import),
-	('/test', Test),
+#	('/test', Test),
 	], debug=True)
 
 
