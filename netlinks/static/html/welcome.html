@@ -1,12 +1,22 @@
 <html><head>
 		<style type="text/css">
+		.div-background {
+			background-image: url("/images/bg.jpg");
+			background-size: 100%;
+			height: 100%;  
+			width: 100%;            
+			position: absolute;
+			-webkit-filter: blur(10px);
+		}
 		.div-container {
-			height: 600px;
-			width: 1000px;
-			position: relative;
-			top: 10%;
-			margin-left: auto;
-			margin-right: auto;
+			height: 500px;
+			width: 800px;
+			position: absolute;
+			top: 0px;
+			bottom: 0px;
+			left: 0px;
+			right: 0px;
+			margin: auto;
 			background: rgba(24, 21, 21, 0.73);
 			border-radius: 10px 10px 10px 10px;
 					}
@@ -36,6 +46,25 @@
 			width: 251;
 			-webkit-filter: brightness(0.8);
 		}
+		.div-footer {
+			position: relative;
+			top: 300px;
+		}
+		.span-footer {
+			font-family: roboto;
+			color: rgb(169, 169, 169);
+			font-size: 1em;
+			display: block;
+			text-align: center;
+			font-weight: 100;
+			text-shadow: 0 0 20px rgba(255, 255, 255, 0.86);
+		}
+		a {
+			color:	rgb(73, 73, 194);
+		}
+		a:link {
+    		text-decoration: none;
+		}
 			
 		</style>
 		<link href="http://roboto-webfont.googlecode.com/svn/trunk/roboto.all.css" rel="stylesheet" type="text/css">
@@ -43,15 +72,7 @@
 	<body style="
     margin: 0;
 ">
-  <div style="
-    background-image: url(&quot;/images/nature.jpg&quot;);
-    height: 100%;  
-    width: 100%;            
-    position: absolute;
-    filter: blur(5px);
-    -webkit-filter: blur(10px);
-">
-  </div>
+  <div class="div-background" ></div>
   <div class="div-container">
 			<div class="div-banner">
 				<span class="span-banner">Welcome to <span style="color: rgb(45, 154, 255); font-size: 2em;">NetLinks</span></span>
@@ -60,6 +81,9 @@
 				<a href="{{login_url}}">
 					<img class="img-login-button" src="/images/sign-in-with-google.png" alt="Sign in with Google" title="Sign in with Google">
 				</a>
+			</div>
+			<div class="div-footer">
+				<span class="span-footer">To save links use NetLinks  <a target="_blank"; href="https://chrome.google.com/webstore/detail/netlinks/ddabmnnmlmlliecaeealngdcgiihkpjn/related">Extension</a></span>
 			</div>
 		</div>
 	
