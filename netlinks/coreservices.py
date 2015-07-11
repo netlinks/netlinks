@@ -57,5 +57,5 @@ def getUser(user_id):
 def getCurrentUser():
     user_id = users.get_current_user().user_id()
     user_key = genUserKey(user_id)  #create key for the user from user_id of the user
-    user = user_key.get()
+    user = user_key.get()   #Get user object from data store using user key
     return user   #return the user object
