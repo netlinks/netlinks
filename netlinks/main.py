@@ -6,7 +6,7 @@ import json
 from google.appengine.api import users
 
 #import only required functions. Do not use wild import (*)
-from renderpages import renderWelcomePage, renderFolderPage, renderTestFolderPage
+from renderpages import renderWelcomePage, renderFolderPage
 from coreservices import isUserSignedUp, isUserSignedIn  
 from userservices import addUser     
 from folderservices import folderServices   

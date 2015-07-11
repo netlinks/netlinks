@@ -44,6 +44,8 @@ class User(ndb.Model):
     sysfolder_root = ndb.KeyProperty(kind='Folder')
     sysfolder_videos = ndb.KeyProperty(kind='Folder')
     user_name = ndb.StringProperty()  #User full name
+    signup_date = ndb.DateTimeProperty()
+    last_login_date = ndb.DateTimeProperty()
     
 # Need to add user preferences - may be in later versions 
 

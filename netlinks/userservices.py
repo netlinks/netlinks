@@ -3,6 +3,7 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 
 import logging
+import datetime
 
 from models import User    #import User models from models.py
 from folderservices import addSystemFolders
@@ -28,6 +29,7 @@ def addUser():
     usr.email = user.email()
     usr.address = None
     usr.phone = None
+    usr.signup_date = datetime.datetime.now()
     
     #Create system folders and store keys of system folders
     logging.info('addUser: adding system folders')   

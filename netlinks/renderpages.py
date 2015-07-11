@@ -4,6 +4,7 @@ from google.appengine.api import users
 import jinja2
 import os
 import logging
+import datetime
 
 from coreservices import getCurrentUser
 
@@ -37,13 +38,14 @@ def renderSignupPage(page,user):
 
 def renderFolderPage(page):
     logging.info('renderFolderPage(): Start')
-    user = users.get_current_user()
-    
-    greeting = user.nickname()
     logout_url = users.create_logout_url('/')
 
     #get current user datastore object 
-    usr = getCurrentUser()   
+    usr = getCurrentUser()
+    
+    #update last login date and save
+    usr.last_login_date = datetime.datetime.now()
+    usr.put()   
     
     #get system folder keys for this user and covert keys to urlsafe
     folder_links = usr.sysfolder_links.get()
@@ -53,7 +55,6 @@ def renderFolderPage(page):
     folder_apps = usr.sysfolder_apps.get()
        
     template_values = {
-                    'message': greeting,
                     'logout_url': logout_url,
                     'folder_links' : folder_links,
                     'folder_videos' : folder_videos,
