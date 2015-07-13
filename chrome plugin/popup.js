@@ -6,7 +6,7 @@ chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
 	{
 		console.log("New Tab Page. Redirecting to Netlinks Website");
 		window.close();		//hiding popup
-		chrome.tabs.update(tab.id, {url: "http://net-links.appspot.com"});	//redirect netlinks page
+		chrome.tabs.update(tab.id, {url: "http://netlinks.me"});	//redirect netlinks page
 	}
 	else
 	{
@@ -27,7 +27,7 @@ $.fn.addFile = function (tab) {
 		"url" : tab.url,
 	};
 	
-	$.post("http://net-links.appspot.com/link",{
+	$.post("http://netlinks.me/link",{
 			action : action,
 			params : JSON.stringify(params)
 	})
@@ -76,7 +76,7 @@ $.fn.saveBookmarks = function () {
 		
 		$("#container").load("progress.txt");
 				
-		$.post("http://net-links.appspot.com/import",{
+		$.post("http://netlinks.me/import",{
 			bookmarkTree : bookmarkTree
 		})
 		.done(function(data,status){

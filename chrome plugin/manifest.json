@@ -3,7 +3,7 @@
 
   "name": "NetLinks",
   "description": "Save your favourite links online",
-  "version": "1.1.1.0",
+  "version": "1.1.1.1",
   "icons": { "48": "drive-cloud.png"},
  
   "browser_action": {
